@@ -146,22 +146,9 @@ public class Worm {
 		this.actionPoints = actionPoints;
 	}
 	public void move(int steps){
-		if ((0<=this.getDirection()) && (this.getDirection()<(Math.PI/2)) &&
-				(isValidStep(steps))){
-			this.setXpos(this.getXpos() + Math.cos(this.getDirection()*this.getRadius()));
-			this.setYpos(this.getYpos() + Math.sin(this.getDirection()*this.getRadius()));
-		} else if (((Math.PI/2)<=this.getDirection()) && (this.getDirection()<(Math.PI)) &&
-				(isValidStep(steps))){
-			this.setXpos(this.getXpos() - Math.cos(this.getDirection()*this.getRadius()));
-			this.setYpos(this.getYpos() + Math.sin(this.getDirection()*this.getRadius()));
-		} else if (((Math.PI)<=this.getDirection()) && (this.getDirection()<((3*Math.PI)/2)) &&
-				(isValidStep(steps))){
-			this.setXpos(this.getXpos() - Math.cos(this.getDirection()*this.getRadius()));
-			this.setYpos(this.getYpos() - Math.sin(this.getDirection()*this.getRadius()));
-		} else if (((3*Math.PI)/2)<=this.getDirection() && (this.getDirection()<((2*Math.PI))) &&
-				(isValidStep(steps))){
-			this.setXpos(this.getXpos() + Math.cos(this.getDirection()*this.getRadius()));
-			this.setYpos(this.getYpos() - Math.sin(this.getDirection()*this.getRadius()));
+		if (isValidStep(steps)){
+			this.setXpos(this.getXpos() + (Math.cos(this.getDirection())*this.getRadius()));
+			this.setYpos(this.getYpos() + (Math.sin(this.getDirection())*this.getRadius()));
 		}
 		this.setActionPoints(this.getActionPoints()-this.computeCostStep(steps));
 	}
