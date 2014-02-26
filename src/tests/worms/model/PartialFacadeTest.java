@@ -1,10 +1,11 @@
-package worms.model;
+package tests.worms.model;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import worms.model.Facade;
+import worms.model.IFacade;
 import worms.model.ModelException;
 import worms.model.Worm;
 import worms.util.Util;
