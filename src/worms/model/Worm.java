@@ -122,8 +122,8 @@ public class Worm {
 	}
 	/**
 	 * Set the maximal amount of action points of this worm.
-	 * @param mass
-	 * 		The action points change along with the mass.
+	 * @param 	mass
+	 * 			The action points change along with the mass.
 	 * 
 	 * @post	The amount of action points must be equal to the mass of the worm rounded
 	 * 			to the nearest integer.
@@ -139,11 +139,30 @@ public class Worm {
 	public void setMaxActionPoints(){
 		 this.maxActionPoints = (int) Math.round(this.getMass());
 	}
+	/**
+	 * Return the current amount of action points for this worm.
+	 */
 	public int getActionPoints(){
 		return this.actionPoints;
 	}
-	public void setActionPoints(int actionPoints){
-		this.actionPoints = actionPoints;
+	/**
+	 * Set a new amount of action points for this worm.
+	 * @param 	actionPoints
+	 * 			The new amount of action points.
+	 * @post	The current value of a worm's action points must always be 
+	 * 			less then or equal to the maximum value. 
+	 * 			|new.getActionPoint() <= new.getMaxActionPoints()
+	 * 
+	 * @post	The current value of a worm's action points must never be less then zero.
+	 * 			|new.getActionPoint() > 0
+	 */
+	private void setActionPoints(int actionPoints){
+		if (actionPoints >= this.getMaxActionPoints())
+			this.actionPoints = this.getMaxActionPoints();
+		if (actionPoints <0)
+			this.actionPoints = 0;
+		else 
+			this.actionPoints = actionPoints;
 	}
 	public void move(int steps){
 		if (isValidStep(steps)){
