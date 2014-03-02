@@ -122,7 +122,7 @@ public class Worm {
 	}
 	/**
 	 * Set the maximal amount of action points of this worm.
-	 * @param 	mass
+	 * @param mass
 	 * 			The action points change along with the mass.
 	 * 
 	 * @post	The amount of action points must be equal to the mass of the worm rounded
@@ -147,8 +147,9 @@ public class Worm {
 	}
 	/**
 	 * Set a new amount of action points for this worm.
-	 * @param 	actionPoints
+	 * @param actionPoints
 	 * 			The new amount of action points.
+	 * 
 	 * @post	The current value of a worm's action points must always be 
 	 * 			less then or equal to the maximum value. 
 	 * 			|new.getActionPoint() <= new.getMaxActionPoints()
@@ -171,16 +172,58 @@ public class Worm {
 		}
 		this.setActionPoints(this.getActionPoints()-this.computeCostStep(steps));
 	}
+	/**
+	 * Returns the cost in actionpoints for a given number of steps in the current direction.
+	 * @param steps
+	 * 			the number of steps the worm is going to move.
+	 * 
+	 * @return	The cost of steps (integer) in the current direction, rounded up to the next integer.
+	 * 			|(steps*(int) Math.round((Math.abs(Math.cos(this.getDirection()))
+				|+Math.abs((4*Math.sin(this.getDirection()))))))
+	 * 			
+	 */
 	public int computeCostStep(int steps){
 		return (steps*(int) Math.round((Math.abs(Math.cos(this.getDirection()))
 				+Math.abs((4*Math.sin(this.getDirection()))))));
 	}
+	/**
+	 * Checks whether a given step in the current direction is a valid step.
+	 * This means that there are still enough actionpoints to complete the step.
+	 * 
+	 * @param steps
+	 * 			number of steps in the current direction.
+	 * 		
+	 * @return 	True if there are still enough actionpoints for the wished step.
+	 * 			and return False if there aren't enough actionpoints for the wished step.
+	 * 			| this.getActionPoints() >= this.computeCostStep(steps)
+	 */
 	public boolean isValidStep(int steps){
 		return this.getActionPoints() >= this.computeCostStep(steps);
 	}
+	/**
+	 * Returns the cost in actionpoints for a turn of a given angle
+	 * .
+	 * @param angle
+	 * 			the angle over which the worm would like to turn in radians.
+	 * 
+	 * @return 	the cost in actionpoints for a turn of a given angle rounded up to the nearest integer.
+	 * 			|(int) Math.abs(Math.round(((60*angle)/(2*Math.PI))))
+	 * 
+	 */
 	public int computeCostTurn(double angle){
 		return (int) Math.abs(Math.round(((60*angle)/(2*Math.PI))));
 	}
+	/**
+	 * Checks whether turning over a given angle is valid.
+	 * This means that there must be enough actionpoints to complete the turn.
+	 * 
+	 * @param angle
+	 * 			the angle over which the worm would like to turn in radians.
+	 * 
+	 * @return 	True if there are still enough actionpoints for the wished turn.
+	 * 			and return False if there aren't enough actionpoints for the wished turn.
+	 * 			| this.getActionPoints() >= this.computeCostTurn(angle) 
+	 */
 	public boolean isValidTurn(double angle){
 		return this.getActionPoints() >= this.computeCostTurn(angle);
 	}
