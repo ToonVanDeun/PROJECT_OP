@@ -227,11 +227,20 @@ public class Worm {
 	public boolean isValidTurn(double angle){
 		return this.getActionPoints() >= this.computeCostTurn(angle);
 	}
+	/**
+	 * Makes the worms turn over a given angle.
+	 * @param angle
+	 * @pre		There must be enough action point to complete the turn.
+	 * 			| this.isvalidTurn(angle)
+	 * @post	The worms must have turned over the given angle.
+	 * 			|new.getDirection() == old.getDirection() + angle
+	 * @post	The worm's actionpoints must be decreased accordingly.
+	 * 			|new.getActionpoints() == old.getActionpoints() - old.computeCostTurn(angle)
+	 */
 	public void turn(double angle){
-		if (isValidTurn(angle)){
-			this.setDirection(this.getDirection()+ angle);
-			this.setActionPoints(this.getActionPoints()-this.computeCostTurn(angle));
-		}
+		this.setDirection(this.getDirection()+ angle);
+		this.setActionPoints(this.getActionPoints()-this.computeCostTurn(angle));
+		
 	}
 	
 	private double xpos;
