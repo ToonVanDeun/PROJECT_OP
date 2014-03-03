@@ -248,9 +248,12 @@ public class Worm {
 	public void jump() {
 		if ((this.getDirection()>Math.PI) && (this.getDirection()<(2*Math.PI)))
 			this.setActionPoints(0);
-		else
+		if (this.isValidJump())
 			this.setXpos(this.getXpos()+this.jumpDistance());
 			this.setActionPoints(0);
+	}
+	private boolean isValidJump() {
+		return (this.getActionPoints() > 0);
 	}
 	private double jumpVelocity() {
 		double force = (5*this.getActionPoints())+(this.getMass()*G);
@@ -262,16 +265,19 @@ public class Worm {
 		return distance;	
 	}
 	public double jumpTime() {
-		double time = this.jumpDistance()/(this.jumpVelocity()*Math.cos(this.getDirection()));
-		return time;
+		double time = 0;
+		if (this.isValidJump())
+			time = this.jumpDistance()/(this.jumpVelocity()*Math.cos(this.getDirection()));
+			return time;
 	}
 	public double[] JumpStep(double timeAfterLaunch) {
 		double[] step;
         step = new double[2];
-        step[0] = ((this.jumpVelocity()*Math.cos(this.getDirection())*timeAfterLaunch)+this.getXpos());   
-        step[1] = (this.jumpVelocity()*Math.sin(this.getDirection())*timeAfterLaunch - 
-        		0.5*G*Math.pow(timeAfterLaunch, 2))+this.getYpos();
-		return step;
+        if (this.isValidJump())
+	        step[0] = ((this.jumpVelocity()*Math.cos(this.getDirection())*timeAfterLaunch)+this.getXpos());   
+	        step[1] = (this.jumpVelocity()*Math.sin(this.getDirection())*timeAfterLaunch - 
+	        		0.5*G*Math.pow(timeAfterLaunch, 2))+this.getYpos();
+			return step;
 	}
 	
 	
