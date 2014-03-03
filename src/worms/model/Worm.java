@@ -242,6 +242,38 @@ public class Worm {
 		this.setActionPoints(this.getActionPoints()-this.computeCostTurn(angle));
 		
 	}
+	/**
+	 * Changes the positions of the worm as a result of a jump from the current position.
+	 */
+	public void jump() {
+		if ((this.getDirection()>Math.PI) && (this.getDirection()<(2*Math.PI)))
+			this.setActionPoints(0);
+		else
+			this.setXpos(this.getXpos()+this.jumpDistance());
+			this.setActionPoints(0);
+	}
+	private double jumpVelocity() {
+		double force = (5*this.getActionPoints())+(this.getMass()*G);
+		double velocity = ((force/this.getMass())*0.5);
+		return velocity;
+	}
+	private double jumpDistance() {
+		double distance = (Math.pow(this.jumpVelocity(), 2)*Math.sin(2*this.getDirection()))/G;
+		return distance;	
+	}
+	public double jumpTime() {
+		double time = this.jumpDistance()/(this.jumpVelocity()*Math.cos(this.getDirection()));
+		return time;
+	}
+	public double[] JumpStep(double timeAfterLaunch) {
+		double[] step;
+        step = new double[2];
+        step[0] = ((this.jumpVelocity()*Math.cos(this.getDirection())*timeAfterLaunch)+this.getXpos());   
+        step[1] = (this.jumpVelocity()*Math.sin(this.getDirection())*timeAfterLaunch - 
+        		0.5*G*Math.pow(timeAfterLaunch, 2))+this.getYpos();
+		return step;
+	}
+	
 	
 	private double xpos;
 	private double ypos;
@@ -252,6 +284,7 @@ public class Worm {
 	 */
 	private double radius;
 	private static final int density = 1602;
+	private static final double G = 9.80665;
 	private double mass;
 	private int maxActionPoints;
 	private int actionPoints;

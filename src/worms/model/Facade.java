@@ -32,20 +32,18 @@ public class Facade implements IFacade {
 
 	@Override
 	public void jump(Worm worm) {
-		// TODO Auto-generated method stub
+		worm.jump();
 		
 	}
 
 	@Override
 	public double getJumpTime(Worm worm) {
-		// TODO Auto-generated method stub
-		return 0;
+		return worm.jumpTime();
 	}
 
 	@Override
 	public double[] getJumpStep(Worm worm, double t) {
-		// TODO Auto-generated method stub
-		return null;
+		return worm.JumpStep(t);
 	}
 
 	@Override
