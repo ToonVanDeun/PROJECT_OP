@@ -28,16 +28,20 @@ public class Worm {
 		this.setDirection(direction);
 		this.setRadius(radius);
 		this.setName(name);
-		setMass(radius);
+		this.setMass(radius);
 		this.setMaxActionPoints();
 		this.setActionPoints(maxActionPoints);
 		
 	}
+	
+	//positie
 	/**
 	 * Die met positie te maken hebben moeten nog defensief gemaakt worden, dus met exceptions 
 	 * the throwen.
 	 * @return
 	 */
+	
+	
 	@Basic
 	public double getXpos(){
 		return this.xpos;
@@ -73,17 +77,32 @@ public class Worm {
 	public static boolean isValidDirection(double direction){
 		return true;
 	}
+	
+	//radius
 	@Basic
 	public double getRadius(){
 		return this.radius;
 	}	
-	public void setRadius(double radius){
-		if (isValidRadius(radius)){
-			this.radius = radius;
+	/**
+	 * The method sets the radius of the worm to the given radius if it's a valid value.
+	 * @param radius
+	 * 			the new radius of the worm.
+	 * @pre		The given radius must be a valid value.
+	 * 			| isValidRadius(radius)
+	 * @post 	The new radius of the worm is set to the given radius.
+	 * 			|new.getRadius() == radius
+	 * @throws	ModelException
+	 * 			When the given radius is not a valid radius the exception will be trown.
+	 * 			| ! isValidRadius(radius)) 
+	 */
+	public void setRadius(double radius) throws ModelException{
+		if ( ! isValidRadius(radius)){
+			throw new ModelException("not a valid radius");
 		}
+		this.radius = radius;
 	}
 	/**
-	 * 
+	 * Checks whether a given radius is a valid radius.
 	 * @param radius
 	 * @return	True if and only if the given radius is larger or equal to 0.25m.
 	 * 			| result == (radius >= 0.25)
@@ -91,28 +110,59 @@ public class Worm {
 	public static boolean isValidRadius(double radius){
 		return radius >= 0.25;
 	}
-	public void setMass(double radius){
-		assert isValidRadius(radius);
+	
+	//mass
+	/**
+	 * The method sets the mass of the worm.
+	 * A worms mass is equal to density*(4/3)*PI*radius^3, with density = 1062.
+	 * @param radius
+	 * @pre		The given radius must be a valid value.
+	 * 			| isValidRadius(radius)
+	 * @post 	The new mass of the worm is set correctly.
+	 * 			|new.getMass() == density*(4/3)*PI*radius^3
+	 * @throws	ModelException
+	 * 			When the given radius is not a valid radius the exception will be trown.
+	 * 			| ! isValidRadius(radius))
+	 */
+	public void setMass(double radius) throws ModelException{
+		if (! isValidRadius(radius))
+			throw new ModelException("not a valid radius");
 		this.mass = density*((4/3)*Math.PI*Math.pow(radius, 3));
 	}
 	public double getMass(){
 		return this.mass;
 	}
+	//name
 	public String getName(){
 		return this.name;
-		
 	}
-	public void setName(String name){
+	
+	public void setName(String name) throws ModelException{
 		if (isValidName(name)){
 			this.name = name;
 		}
 	}
+	/**
+	 * Checks whether a given name is a valid name.
+	 * @param name
+	 * @pre		First letter of the name must be uppercase.
+	 * 
+	 * @pre		name must at least exist out of two letters.
+	 * 
+	 * @pre		only letters are allowed in the name (also " and ')
+	 * 
+	 * @throws	ModelException
+	 * 			When the name is not a valid name.
+	 * 			| (! isValidName(name))
+	 */
 	public static boolean isValidName(String name){
 		String regx = "^[\\p{L} .'-]+${2,}";
 	    Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
 	    Matcher matcher = pattern.matcher(name);
 	    return matcher.find();
 	}
+	
+	//actionponts
 	/**
 	 * Return the maximal amount of action points for this worm.
 	 */
@@ -248,11 +298,11 @@ public class Worm {
 	public void jump() {
 		if ((this.getDirection()>Math.PI) && (this.getDirection()<(2*Math.PI)))
 			this.setActionPoints(0);
-		if (this.isValidJump())
+		if (this.canJump())
 			this.setXpos(this.getXpos()+this.jumpDistance());
 			this.setActionPoints(0);
 	}
-	private boolean isValidJump() {
+	private boolean canJump() {
 		return (this.getActionPoints() > 0);
 	}
 	private double jumpVelocity() {
@@ -266,14 +316,14 @@ public class Worm {
 	}
 	public double jumpTime() {
 		double time = 0;
-		if (this.isValidJump())
+		if (this.canJump())
 			time = this.jumpDistance()/(this.jumpVelocity()*Math.cos(this.getDirection()));
 			return time;
 	}
 	public double[] JumpStep(double timeAfterLaunch) {
 		double[] step;
         step = new double[2];
-        if (this.isValidJump())
+        if (this.canJump())
 	        step[0] = ((this.jumpVelocity()*Math.cos(this.getDirection())*timeAfterLaunch)+this.getXpos());   
 	        step[1] = (this.jumpVelocity()*Math.sin(this.getDirection())*timeAfterLaunch - 
 	        		0.5*G*Math.pow(timeAfterLaunch, 2))+this.getYpos();
@@ -289,7 +339,7 @@ public class Worm {
 	 * 		| radius >= 0.25
 	 */
 	private double radius;
-	private static final int density = 1602;
+	private static final int density = 1062;
 	private static final double G = 9.80665;
 	private double mass;
 	private int maxActionPoints;
