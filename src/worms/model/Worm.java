@@ -162,7 +162,7 @@ public class Worm {
 	    return matcher.find();
 	}
 	
-	//actionponts
+	//actionpoints
 	/**
 	 * Return the maximal amount of action points for this worm.
 	 */
@@ -215,6 +215,8 @@ public class Worm {
 		else 
 			this.actionPoints = actionPoints;
 	}
+	
+	//move
 	public void move(int steps){
 		if (isValidStep(steps)){
 			this.setXpos(this.getXpos() + (Math.cos(this.getDirection())*this.getRadius()));
@@ -292,6 +294,8 @@ public class Worm {
 		this.setActionPoints(this.getActionPoints()-this.computeCostTurn(angle));
 		
 	}
+	
+	//jump
 	/**
 	 * Changes the positions of the worm as a result of a jump from the current position.
 	 */
