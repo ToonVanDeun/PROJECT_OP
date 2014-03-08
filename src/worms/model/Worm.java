@@ -187,12 +187,10 @@ public class Worm {
 	 * The method sets the mass of the worm.
 	 * A worms mass is equal to density*(4/3)*PI*radius^3, with density = 1062.
 	 * @param radius
-	 * @pre		The given radius must be a valid value.
-	 * 			| isValidRadius(radius)
 	 * @post 	The new mass of the worm is set correctly.
 	 * 			|new.getMass() == density*(4/3)*PI*radius^3
 	 * @throws	ModelException
-	 * 			When the given radius is not a valid radius the exception will be trown.
+	 * 			When the given radius is not a valid radius the exception will be thrown.
 	 * 			| ! isValidRadius(radius))
 	 */
 	public void setMass(double radius) throws ModelException{
@@ -206,15 +204,28 @@ public class Worm {
 	public double getMass(){
 		return this.mass;
 	}
-	//name
+	//name (defensief)
+	/**
+	 * Returns the name of the worm.
+	 */
 	public String getName(){
 		return this.name;
 	}
-	
+	/**
+	 * Sets the name of the worm to a given name if the given name is a valid name.
+	 * @param name
+	 * 			The new name of the worm.
+	 * @post	The name of the worm is set to the new name.
+	 * 			|new.getName() == name
+	 * @throws ModelException
+	 * 			When the name is not a valid name the exception is thrown.
+	 * 			| ! isValidName(name)
+	 */
 	public void setName(String name) throws ModelException{
-		if (isValidName(name)){
-			this.name = name;
-		}
+		if (! isValidName(name))
+			throw new ModelException("that name is not valid");
+		this.name = name;
+		
 	}
 	/**
 	 * Checks whether a given name is a valid name.
@@ -236,7 +247,7 @@ public class Worm {
 	    return matcher.find();
 	}
 	
-	//actionpoints
+	//actionpoints (totaal)
 	/**
 	 * Return the maximal amount of action points for this worm.
 	 */
@@ -255,8 +266,7 @@ public class Worm {
 	 * 
 	 * @post	If the mass of a worm changes, the maximal must be adjusted accordingly.
 	 * 			| new.getMass() = mass
-	 * 			| this.maxActionPoints = (int) Math.round(new.getMass())
-	 * 
+	 * 			| this.maxActionPoints == (int) Math.round(new.getMass()) == int Math.round(mass)
 	 * @effect	The maximal amount of action points has been set.
 	 */
 	@Basic
@@ -272,13 +282,11 @@ public class Worm {
 	/**
 	 * Set a new amount of action points for this worm.
 	 * @param actionPoints
-	 * 			The new amount of action points.
-	 * 
-	 * @post	The current value of a worm's action points must always be 
+	 * 			The new amount of action points. 
+	 * @post	The value of a worm's action points must always be 
 	 * 			less then or equal to the maximum value. 
 	 * 			|new.getActionPoint() <= new.getMaxActionPoints()
-	 * 
-	 * @post	The current value of a worm's action points must never be less then zero.
+	 * @post	The value of a worm's action points must never be less then zero.
 	 * 			|new.getActionPoint() > 0
 	 */
 	private void setActionPoints(int actionPoints){
@@ -290,23 +298,36 @@ public class Worm {
 			this.actionPoints = actionPoints;
 	}
 	
-	//move
-	public void move(int steps){
-		if (isValidStep(steps)){
-			this.setXpos(this.getXpos() + ((steps)*Math.cos(this.getDirection())*this.getRadius()));
-			this.setYpos(this.getYpos() + ((steps)*Math.sin(this.getDirection())*this.getRadius()));
-		}
+	//move (defensief)
+	/**
+	 * The method makes the worm mov a given number of steps in the direction the worm is currently facing.
+	 * @param steps
+	 * 			The number of steps the worm is moving
+	 * @post	The worm has moved the according number of steps in the current direction.
+	 * 			|new.getXpos() == old.getXpos() + steps*cos(direction)*radius
+	 * 			|new.getYpos() == old.getYpos() + steps*sin(direction)*radius
+	 * @post	The worms actionpoints are correctly reduced.
+	 * 			|new.getActionPoints == old.getActionPoints() - old.computeCostStep(steps)
+	 * @throws	ModelException
+	 * 			If the worm can't move the amount of steps because he has insufficient actionpoint
+	 * 			the exception is thrown.
+	 * 			| ! isValidStep(steps)
+	 */
+	public void move(int steps) throws ModelException {
+		if ( ! isValidStep(steps))
+			throw new ModelException("not allowed to move");
+		this.setXpos(this.getXpos() + ((steps)*Math.cos(this.getDirection())*this.getRadius()));
+		this.setYpos(this.getYpos() + ((steps)*Math.sin(this.getDirection())*this.getRadius()));
 		this.setActionPoints(this.getActionPoints()-this.computeCostStep(steps));
 	}
+	// ~ actionpoints (totaal)
 	/**
 	 * Returns the cost in actionpoints for a given number of steps in the current direction.
 	 * @param steps
 	 * 			the number of steps the worm is going to move.
-	 * 
 	 * @return	The cost of steps (integer) in the current direction, rounded up to the next integer.
 	 * 			|(steps*(int) Math.round((Math.abs(Math.cos(this.getDirection()))
-				|+Math.abs((4*Math.sin(this.getDirection()))))))
-	 * 			
+				|+Math.abs((4*Math.sin(this.getDirection()))))))		
 	 */
 	public int computeCostStep(int steps){
 		return (steps*(int) Math.round((Math.abs(Math.cos(this.getDirection()))
@@ -353,6 +374,8 @@ public class Worm {
 	public boolean isValidTurn(double angle){
 		return this.getActionPoints() >= this.computeCostTurn(angle);
 	}
+	
+	//turn (nominaal)
 	/**
 	 * Makes the worms turn over a given angle.
 	 * @param angle
@@ -364,40 +387,71 @@ public class Worm {
 	 * 			|new.getActionpoints() == old.getActionpoints() - old.computeCostTurn(angle)
 	 */
 	public void turn(double angle){
+		assert this.isValidTurn(angle);
 		this.setDirection(this.getDirection()+ angle);
 		this.setActionPoints(this.getActionPoints()-this.computeCostTurn(angle));
-		
 	}
 	
-	//jump
+	//jump (defensief)
 	/**
 	 * Changes the positions of the worm as a result of a jump from the current position.
+	 * @post 	The worms jumped to the correct position when the direction is in the range (0 - PI)
+	 * 			| new.getXpos() == old.getXpos() + this.jumpDistance()
+	 * @post 	The worms hasn't jumped when the direction is in the range (PI- 2*PI)
+	 * 			| new.getXpos() == old.getXpos()
+	 * @post	The worm's actionpoints are reduced accordingly.
+	 * 			|new.getActionPoints() == 0;
+	 * @throws ModelException
+	 * 			When the worm has no action point left to jump the exception is thrown.
+	 * 			|! canJump()
 	 */
-	public void jump() {
+	public void jump() throws ModelException {
+		if (! canJump())
+			throw new ModelException("can't jump");
 		if ((this.getDirection()>Math.PI) && (this.getDirection()<(2*Math.PI)))
 			this.setActionPoints(0);
-		if (this.canJump())
-			this.setXpos(this.getXpos()+this.jumpDistance());
-			this.setActionPoints(0);
+		
+		this.setXpos(this.getXpos()+this.jumpDistance());
+		this.setActionPoints(0);
 	}
+	//~actionpoints
+	/**
+	 * checks whether the worms still has actionpoints so he can jump.
+	 */
 	private boolean canJump() {
 		return (this.getActionPoints() > 0);
 	}
+	//~jump
+	/**
+	 * Returns the jump velocity of a worm.
+	 * 	this is needed in to calculate the distance over which to worm can jump.
+	 */
 	private double jumpVelocity() {
 		double force = (5*this.getActionPoints())+(this.getMass()*G);
 		double velocity = ((force/this.getMass())*0.5);
 		return velocity;
 	}
+	/**
+	 * Returns the jump distance of a worm.
+	 */
 	private double jumpDistance() {
 		double distance = (Math.pow(this.jumpVelocity(), 2)*Math.sin(2*this.getDirection()))/G;
 		return distance;	
 	}
+	/**
+	 * Returns the time it takes to worm to jump (to his new position).
+	 */
 	public double jumpTime() {
 		double time = 0;
 		if (this.canJump())
 			time = this.jumpDistance()/(this.jumpVelocity()*Math.cos(this.getDirection()));
 			return time;
 	}
+	/**
+	 * Returns the worms position during a jump on a given time (after the jump started).
+	 * @param timeAfterLaunch
+	 * 			The time after the jump started
+	 */
 	public double[] JumpStep(double timeAfterLaunch) {
 		double[] step;
         step = new double[2];
@@ -408,7 +462,7 @@ public class Worm {
 			return step;
 	}
 	
-	
+	// variables
 	private double xpos;
 	private double ypos;
 	private double direction;
@@ -418,12 +472,13 @@ public class Worm {
 	 */
 	private double radius;
 	private double radiusLowerBound;
-	private static final int density = 1062;
-	private static final double G = 9.80665;
 	private double mass;
 	private int maxActionPoints;
 	private int actionPoints;
 	private String name;
+	//constants
+	private static final int density = 1062;
+	private static final double G = 9.80665;
 	
 
 }
