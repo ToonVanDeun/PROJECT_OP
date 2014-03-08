@@ -127,7 +127,7 @@ public class Worm {
 	public void setMass(double radius) throws ModelException{
 		if (! isValidRadius(radius))
 			throw new ModelException("not a valid radius");
-		this.mass = density*((4/3)*Math.PI*Math.pow(radius, 3));
+		this.mass = density*((4.0/3.0)*Math.PI*Math.pow(this.getRadius(), 3));
 	}
 	public double getMass(){
 		return this.mass;
@@ -219,8 +219,8 @@ public class Worm {
 	//move
 	public void move(int steps){
 		if (isValidStep(steps)){
-			this.setXpos(this.getXpos() + (Math.cos(this.getDirection())*this.getRadius()));
-			this.setYpos(this.getYpos() + (Math.sin(this.getDirection())*this.getRadius()));
+			this.setXpos(this.getXpos() + ((steps)*Math.cos(this.getDirection())*this.getRadius()));
+			this.setYpos(this.getYpos() + ((steps)*Math.sin(this.getDirection())*this.getRadius()));
 		}
 		this.setActionPoints(this.getActionPoints()-this.computeCostStep(steps));
 	}
