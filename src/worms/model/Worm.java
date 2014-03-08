@@ -3,6 +3,7 @@ package worms.model;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -31,43 +32,88 @@ public class Worm {
 		this.setMass(radius);
 		this.setMaxActionPoints();
 		this.setActionPoints(maxActionPoints);
+		this.setRadiusLowerBound();
 		
 	}
 	
-	//positie
+	//position (defensief)
+	
 	/**
-	 * Die met positie te maken hebben moeten nog defensief gemaakt worden, dus met exceptions 
-	 * the throwen.
-	 * @return
+	 * Returns the x-position of the worm.
 	 */
-	
-	
 	@Basic
 	public double getXpos(){
 		return this.xpos;
 	}
-	public void setXpos(double xpos){
+	/**
+	 * Sets the x-position of the worm.
+	 * @param xpos
+	 * 			The (new) x-position of the worm
+	 * @post	the given x-position is the new x-position of the worm.
+	 * 			| new.getXpos() == xpos
+	 * @throws	ModelException
+	 * 			If xpos isn't a valid x position the exception is thrown.
+	 * 			| ! isValidXpos(xpos)
+	 */
+	public void setXpos(double xpos) throws ModelException{
+		if (! isValidPos(xpos))
+			throw new ModelException("not a valid position");
 		this.xpos = xpos;
 	}
+	/**
+	 * Returns the y-position of the worm.
+	 */
 	@Basic
 	public double getYpos(){
 		return this.ypos;
 	}
-	public void setYpos(double ypos){
+	/**
+	 * Sets the y-position of the worm.
+	 * @param ypos
+	 * 			The (new) y-position of the worm
+	 * @post	the given y-position is the new y-position of the worm.
+	 * 			| new.getYpos() == ypos
+	 * @throws	ModelException
+	 * 			If ypos isn't a valid y position the exception is thrown.
+	 * 			| ! isValidPos(ypos)
+	 */
+	public void setYpos(double ypos) throws ModelException{
+		if (! isValidPos(ypos))
+			throw new ModelException("not a valid position");
 		this.ypos = ypos;
 	}
 	/**
-	 * 
-	 * @return
+	 * Returns whether the given position is a valid position.
+	 * @param pos
+	 * @return true if the given position (pos) is a valid position
+	 * 			if not, return false.
+	 */
+	public boolean isValidPos(double pos) {
+		return true;
+	}
+	
+	//direction (nominaal)
+	/**
+	 * Returns the current direction of the worm.
+	 * 	The direction of the worm is an angle given in radians, 
+	 * 	which indicates where the worm is facing at. (ex. facing up = PI/2)
 	 */
 	@Basic
 	public double getDirection(){
 		return this.direction;
 	}
-	public void setDirection(double direction){
-		if (isValidDirection(direction)){
-			this.direction=direction;
-		}
+	/**
+	 * Sets the direction of the worm
+	 * @param direction
+	 * 			The new direction of the worm.
+	 * @pre		The given direction of worm must be a valid direction.
+	 * 			|isValidDirection(direction)
+	 * @post	The new direction of the worm is the given direction.
+	 * 			| new.getDirection() == direction
+	 */
+	private void setDirection(double direction){
+		assert (isValidDirection(direction));
+		this.direction=direction;
 	}
 	/**
 	 * Dit is nog niet af, maar ik weet niet wat pre conditie moet zijn.
@@ -78,7 +124,10 @@ public class Worm {
 		return true;
 	}
 	
-	//radius
+	//radius (defensief)
+	/**
+	 * Returns the current radius of the worm.
+	 */
 	@Basic
 	public double getRadius(){
 		return this.radius;
@@ -104,14 +153,36 @@ public class Worm {
 	/**
 	 * Checks whether a given radius is a valid radius.
 	 * @param radius
-	 * @return	True if and only if the given radius is larger or equal to 0.25m.
-	 * 			| result == (radius >= 0.25)
+	 * @return	True if and only if the given radius is larger or equal to the minimal allowed radius.
+	 * 			| result == (radius >= this.getRadiusLowerBound())
 	 */
-	public static boolean isValidRadius(double radius){
-		return radius >= 0.25;
+	public boolean isValidRadius(double radius){
+		return radius >= this.getRadiusLowerBound();
+	}
+	/**
+	 * Returns the lowerbound of the radius
+	 * 	the lowerbound og the radius is the minimal allowed radius of the worm.
+	 */
+	@Basic
+	public double getRadiusLowerBound() {
+		return this.radiusLowerBound;
+	}
+	/**
+	 * Sets the minimal allowd radius to lowerbound;
+	 * @param lowerbound
+	 * 			The minimal allowed radius of the worm.
+	 */
+	public void setRadiusLowerBound(double lowerbound) {
+		this.radiusLowerBound = lowerbound;
+	}
+	/**
+	 * Sets the minimal allowd radius to 0.25;
+	 */
+	public void setRadiusLowerBound() {
+		this.radiusLowerBound = 0.25;
 	}
 	
-	//mass
+	//mass (defensief)
 	/**
 	 * The method sets the mass of the worm.
 	 * A worms mass is equal to density*(4/3)*PI*radius^3, with density = 1062.
@@ -129,6 +200,9 @@ public class Worm {
 			throw new ModelException("not a valid radius");
 		this.mass = density*((4.0/3.0)*Math.PI*Math.pow(this.getRadius(), 3));
 	}
+	/**
+	 * Returns the mass of the worm.
+	 */
 	public double getMass(){
 		return this.mass;
 	}
@@ -343,6 +417,7 @@ public class Worm {
 	 * 		| radius >= 0.25
 	 */
 	private double radius;
+	private double radiusLowerBound;
 	private static final int density = 1062;
 	private static final double G = 9.80665;
 	private double mass;
