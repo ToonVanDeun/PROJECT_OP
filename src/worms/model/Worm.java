@@ -408,18 +408,15 @@ public class Worm {
 	public void jump() throws ModelException {
 		if (! canJump())
 			throw new ModelException("can't jump");
-		if ((this.getDirection()>Math.PI) && (this.getDirection()<(2*Math.PI)))
-			this.setActionPoints(0);
-		
 		this.setXpos(this.getXpos()+this.jumpDistance());
 		this.setActionPoints(0);
 	}
 	//~actionpoints
 	/**
-	 * checks whether the worms still has actionpoints so he can jump.
+	 * checks whether the worms still has actionpoints and is facing the right direction so he can jump.
 	 */
 	private boolean canJump() {
-		return (this.getActionPoints() > 0);
+		return ((this.getActionPoints() > 0) && !((this.getDirection()>Math.PI) && (this.getDirection()<(2*Math.PI))));
 	}
 	//~jump
 	/**
