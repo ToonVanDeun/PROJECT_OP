@@ -242,8 +242,8 @@ public class Worm {
 	 * 			| (! isValidName(name))
 	 */
 	public static boolean isValidName(String name){
-		String regx = "^[\\p{L} .'-]+${2,}";
-	    Pattern pattern = Pattern.compile(regx,Pattern.CASE_INSENSITIVE);
+	    String regex = "^[A-Z]{1}[a-zA-Z \"\']{1,}$";
+	    Pattern pattern = Pattern.compile(regex);
 	    Matcher matcher = pattern.matcher(name);
 	    return matcher.find();
 	}
