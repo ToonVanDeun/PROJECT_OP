@@ -116,9 +116,10 @@ public class Worm {
 		this.direction=direction;
 	}
 	/**
-	 * Dit is nog niet af, maar ik weet niet wat pre conditie moet zijn.
+	 * Returns whether the given direction is a valid direction.
 	 * @param direction
-	 * @return
+	 * @return true if the given direction (direction) is a valid direction
+	 * 			if not, return false.
 	 */
 	public static boolean isValidDirection(double direction){
 		return true;
@@ -141,7 +142,7 @@ public class Worm {
 	 * @post 	The new radius of the worm is set to the given radius.
 	 * 			|new.getRadius() == radius
 	 * @throws	ModelException
-	 * 			When the given radius is not a valid radius the exception will be trown.
+	 * 			When the given radius is not a valid radius the exception will be thrown.
 	 * 			| ! isValidRadius(radius)) 
 	 */
 	public void setRadius(double radius) throws ModelException{
@@ -161,14 +162,14 @@ public class Worm {
 	}
 	/**
 	 * Returns the lowerbound of the radius
-	 * 	the lowerbound og the radius is the minimal allowed radius of the worm.
+	 * 	the lowerbound of the radius is the minimal allowed radius of the worm.
 	 */
 	@Basic
 	public double getRadiusLowerBound() {
 		return this.radiusLowerBound;
 	}
 	/**
-	 * Sets the minimal allowd radius to lowerbound;
+	 * Sets the minimal allowed radius to lowerbound;
 	 * @param lowerbound
 	 * 			The minimal allowed radius of the worm.
 	 */
@@ -287,7 +288,7 @@ public class Worm {
 	 * 			less then or equal to the maximum value. 
 	 * 			|new.getActionPoint() <= new.getMaxActionPoints()
 	 * @post	The value of a worm's action points must never be less then zero.
-	 * 			|new.getActionPoint() > 0
+	 * 			|new.getActionPoint() >= 0
 	 */
 	private void setActionPoints(int actionPoints){
 		if (actionPoints >= this.getMaxActionPoints())
@@ -300,7 +301,7 @@ public class Worm {
 	
 	//move (defensief)
 	/**
-	 * The method makes the worm mov a given number of steps in the direction the worm is currently facing.
+	 * The method makes the worm move a given number of steps in the direction the worm is currently facing.
 	 * @param steps
 	 * 			The number of steps the worm is moving
 	 * @post	The worm has moved the according number of steps in the current direction.
