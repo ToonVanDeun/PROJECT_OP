@@ -24,6 +24,7 @@ public class WormTest {
 	private static Worm worm_radius;
 	private static Worm worm_mass;
 	private static Worm worm_name;
+	private static Worm worm_actionpoints;
 	private static Worm worm_jump;
 	
 	
@@ -33,6 +34,7 @@ public class WormTest {
 		worm_radius = new Worm(0, 0, 0, 5, "Radius");
 		worm_mass = new Worm(0, 0, 0, 1, "Mass");
 		worm_name = new Worm(0, 0, 0, 1, "Name");
+		worm_actionpoints = new Worm(0, 0, 0, 1, "ActionPoints");
 		worm_jump = new Worm(0, 0, 3 * Math.PI / 2, 1, "Jump");
 	}
 
@@ -109,6 +111,29 @@ public class WormTest {
 	public void test_setName_failsCase4() {
 		worm_name.setName("Azerty///");
 	}
+	
+	//actionpoints
+	@Test
+	public void test_setMaxActionPoints_valid() {
+		worm_actionpoints.setMaxActionPoints();
+		assert worm_actionpoints.getMaxActionPoints() == Math.round(worm_actionpoints.getMass());
+	}
+	@Test
+	public void test_setActionPoints_validCase() {
+		worm_actionpoints.setActionPoints(500);
+		assert worm_actionpoints.getActionPoints() == 500;
+	}
+	@Test
+	public void test_setActionPoints_validCaseTotal1() {
+		worm_actionpoints.setActionPoints(-10);
+		assert worm_actionpoints.getActionPoints() == 0;
+	}
+	@Test
+	public void test_setActionPoints_validCaseTotal2() {
+		worm_actionpoints.setActionPoints(worm_actionpoints.getMaxActionPoints()+500);
+		assert worm_actionpoints.getActionPoints() == (worm_actionpoints.getMaxActionPoints());
+	}
+	
 	//jump
 	@Test(expected = ModelException.class)
 	public void test_jump_fail() {

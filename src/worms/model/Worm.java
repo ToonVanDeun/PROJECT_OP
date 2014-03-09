@@ -291,7 +291,7 @@ public class Worm {
 	 * @post	The value of a worm's action points must never be less then zero.
 	 * 			|new.getActionPoint() >= 0
 	 */
-	private void setActionPoints(int actionPoints){
+	public void setActionPoints(int actionPoints){
 		if (actionPoints >= this.getMaxActionPoints())
 			this.actionPoints = this.getMaxActionPoints();
 		if (actionPoints <0)
