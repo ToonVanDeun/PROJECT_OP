@@ -111,7 +111,7 @@ public class Worm {
 	 * @post	The new direction of the worm is the given direction.
 	 * 			| new.getDirection() == direction
 	 */
-	private void setDirection(double direction){
+	public void setDirection(double direction){
 		assert (isValidDirection(direction));
 		this.direction=direction;
 	}
@@ -121,7 +121,8 @@ public class Worm {
 	 * @return true if the given direction (direction) is a valid direction
 	 * 			if not, return false.
 	 */
-	public static boolean isValidDirection(double direction){
+	public
+	static boolean isValidDirection(double direction){
 		return ! (Double.NaN == direction);
 	}
 	
@@ -330,7 +331,7 @@ public class Worm {
 	 * 			|(steps*(int) Math.round((Math.abs(Math.cos(this.getDirection()))
 				|+Math.abs((4*Math.sin(this.getDirection()))))))		
 	 */
-	public int computeCostStep(int steps){
+	private int computeCostStep(int steps){
 		return (steps*(int) Math.round((Math.abs(Math.cos(this.getDirection()))
 				+Math.abs((4*Math.sin(this.getDirection()))))));
 	}
@@ -358,7 +359,7 @@ public class Worm {
 	 * 			|(int) Math.abs(Math.round(((60*angle)/(2*Math.PI))))
 	 * 
 	 */
-	public int computeCostTurn(double angle){
+	private int computeCostTurn(double angle){
 		return (int) Math.abs(Math.round(((60*angle)/(2*Math.PI))));
 	}
 	/**
