@@ -25,6 +25,7 @@ public class WormTest {
 	private static Worm worm_mass;
 	private static Worm worm_name;
 	private static Worm worm_actionpoints;
+	private static Worm worm_move;
 	private static Worm worm_jump;
 	
 	
@@ -35,6 +36,7 @@ public class WormTest {
 		worm_mass = new Worm(0, 0, 0, 1, "Mass");
 		worm_name = new Worm(0, 0, 0, 1, "Name");
 		worm_actionpoints = new Worm(0, 0, 0, 1, "ActionPoints");
+		worm_move = new Worm(0, 0, (Math.PI)/4, 1, "Move");
 		worm_jump = new Worm(0, 0, 3 * Math.PI / 2, 1, "Jump");
 	}
 
@@ -134,6 +136,17 @@ public class WormTest {
 		assert worm_actionpoints.getActionPoints() == (worm_actionpoints.getMaxActionPoints());
 	}
 	
+	//move
+	@Test
+	public void test_move_valid() {
+		double initialActionPoints = worm_move.getActionPoints();
+		double oldXpos = worm_move.getXpos();
+		double oldYpos = worm_move.getYpos();
+		worm_move.move(2);
+		//assert worm_move.getActionPoints() == math.round((initialActionPoints - (5*Math.sqrt(2))));
+		assert worm_move.getXpos() == (oldXpos + Math.cos(Math.PI/2));
+		assert worm_move.getYpos() == (oldYpos + Math.sin(Math.PI/2));
+	}
 	//jump
 	@Test(expected = ModelException.class)
 	public void test_jump_fail() {
