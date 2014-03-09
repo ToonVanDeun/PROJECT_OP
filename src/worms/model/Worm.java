@@ -292,7 +292,7 @@ public class Worm {
 	 * 			|new.getActionPoint() >= 0
 	 */
 	public void setActionPoints(int actionPoints){
-		if (actionPoints >= this.getMaxActionPoints())
+		if (actionPoints > this.getMaxActionPoints())
 			this.actionPoints = this.getMaxActionPoints();
 		if (actionPoints <0)
 			this.actionPoints = 0;
@@ -333,7 +333,7 @@ public class Worm {
 	 */
 	private int computeCostStep(int steps){
 		return (steps*(int) Math.round((Math.abs(Math.cos(this.getDirection()))
-				+Math.abs((4*Math.sin(this.getDirection()))))));
+				+Math.abs((4.0*Math.sin(this.getDirection()))))));
 	}
 	/**
 	 * Checks whether a given step in the current direction is a valid step.

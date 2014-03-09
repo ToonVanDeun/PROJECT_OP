@@ -132,7 +132,13 @@ public class WormTest {
 	}
 	@Test
 	public void test_setActionPoints_validCaseTotal2() {
-		worm_actionpoints.setActionPoints(worm_actionpoints.getMaxActionPoints()+500);
+		//System.out.println(worm_actionpoints.getActionPoints());
+		//System.out.println(worm_actionpoints.getMaxActionPoints());
+		int newActionPoints = worm_actionpoints.getMaxActionPoints()+500;
+		//System.out.println(newActionPoints);
+		worm_actionpoints.setActionPoints(newActionPoints);
+		//System.out.println(worm_actionpoints.getActionPoints());
+		//System.out.println(worm_actionpoints.getMaxActionPoints());
 		assert worm_actionpoints.getActionPoints() == (worm_actionpoints.getMaxActionPoints());
 	}
 	
@@ -142,10 +148,13 @@ public class WormTest {
 		double initialActionPoints = worm_move.getActionPoints();
 		double oldXpos = worm_move.getXpos();
 		double oldYpos = worm_move.getYpos();
+		System.out.println(worm_move.getActionPoints());
 		worm_move.move(2);
-		//assert worm_move.getActionPoints() == math.round((initialActionPoints - (5*Math.sqrt(2))));
-		assert worm_move.getXpos() == (oldXpos + Math.cos(Math.PI/2));
-		assert worm_move.getYpos() == (oldYpos + Math.sin(Math.PI/2));
+		System.out.println(worm_move.getActionPoints());
+		System.out.println((int) Math.round(5.0*Math.sqrt(2.0)));
+		assert worm_move.getActionPoints() == (initialActionPoints - (int) Math.round(5.0*Math.sqrt(2.0)));
+		assert worm_move.getXpos() == (oldXpos + 2*Math.cos(Math.PI/4));
+		assert worm_move.getYpos() == (oldYpos + 2*Math.sin(Math.PI/4));
 	}
 	//jump
 	@Test(expected = ModelException.class)
