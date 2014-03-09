@@ -89,7 +89,7 @@ public class Worm {
 	 * 			if not, return false.
 	 */
 	public boolean isValidPos(double pos) {
-		return true;
+		return ! (Double.NaN == pos);
 	}
 	
 	//direction (nominaal)
@@ -122,7 +122,7 @@ public class Worm {
 	 * 			if not, return false.
 	 */
 	public static boolean isValidDirection(double direction){
-		return true;
+		return ! (Double.NaN == direction);
 	}
 	
 	//radius (defensief)
