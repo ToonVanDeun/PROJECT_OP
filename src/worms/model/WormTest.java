@@ -140,7 +140,7 @@ public class WormTest {
 		worm_actionpoints.setActionPoints(newActionPoints);
 		System.out.println("AP " + worm_actionpoints.getActionPoints());
 		System.out.println("maxAP " + worm_actionpoints.getMaxActionPoints());
-		assert worm_actionpoints.getActionPoints() == maxAPs;
+		assertEquals( worm_actionpoints.getActionPoints(), maxAPs);
 	}
 	
 	//move
