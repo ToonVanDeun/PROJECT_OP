@@ -12,6 +12,7 @@ import be.kuleuven.cs.som.annotate.*;
  * 	De naam ook defensief.
  */
 //TEst
+//Test2
 /**
  * A class of worms involving x-position, y-position a radius and a direction.
  * 
