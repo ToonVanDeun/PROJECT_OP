@@ -173,9 +173,9 @@ public class WormTest {
 		worm_turn.turn(-Math.PI);
 		assert worm_turn.getDirection() == -Math.PI;
 	}
-	@Test(expected = ModelException.class)
+	@Test(expected = AssertionError.class)
 	public void test_turn_failsNotEnoughActionPoints() {
-		worm_turn.turn(150*Math.PI);
+		worm_turn.turn(170*Math.PI);
 	}
 	
 	//jump
