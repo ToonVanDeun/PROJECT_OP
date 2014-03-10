@@ -147,14 +147,17 @@ public class WormTest {
 	//move
 	@Test
 	public void test_move_valid() {
-		double initialActionPoints = worm_move.getActionPoints();
+		int initialActionPoints = worm_move.getActionPoints();
 		double oldXpos = worm_move.getXpos();
 		double oldYpos = worm_move.getYpos();
 		System.out.println(worm_move.getActionPoints());
+		System.out.println(initialActionPoints);
 		worm_move.move(2);
 		System.out.println(worm_move.getActionPoints());
-		System.out.println((int) Math.round(5.0*Math.sqrt(2.0)));
-		assert worm_move.getActionPoints() == (initialActionPoints - (int) Math.round(5.0*Math.sqrt(2.0)));
+		System.out.println(Math.round((initialActionPoints
+				- (5.0*Math.sqrt(2.0)))));
+		assert worm_move.getActionPoints() == (initialActionPoints
+				- Math.round(5.0*Math.sqrt(2.0)));
 		assert worm_move.getXpos() == (oldXpos + 2*Math.cos(Math.PI/4));
 		assert worm_move.getYpos() == (oldYpos + 2*Math.sin(Math.PI/4));
 	}

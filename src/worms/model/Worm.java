@@ -332,7 +332,7 @@ public class Worm {
 				|+Math.abs((4*Math.sin(this.getDirection()))))))		
 	 */
 	private int computeCostStep(int steps){
-		return (steps*(int) Math.round((Math.abs(Math.cos(this.getDirection()))
+		return ((int) Math.round((steps)*(Math.abs(Math.cos(this.getDirection()))
 				+Math.abs((4.0*Math.sin(this.getDirection()))))));
 	}
 	/**
