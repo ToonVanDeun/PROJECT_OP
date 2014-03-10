@@ -27,6 +27,7 @@ public class WormTest {
 	private static Worm worm_actionpoints;
 	private static Worm worm_move;
 	private static Worm worm_jump;
+	private static Worm worm_turn;
 	
 	
 	@Before
@@ -37,6 +38,7 @@ public class WormTest {
 		worm_name = new Worm(0, 0, 0, 1, "Name");
 		worm_actionpoints = new Worm(0, 0, 0, 1, "ActionPoints");
 		worm_move = new Worm(0, 0, (Math.PI)/4, 1, "Move");
+		worm_turn = new Worm(0, 0, 0, 1, "Turn");
 		worm_jump = new Worm(0, 0, 3 * Math.PI / 2, 1, "Jump");
 	}
 
@@ -154,6 +156,28 @@ public class WormTest {
 		assert worm_move.getXpos() == (oldXpos + 2*Math.cos(Math.PI/4));
 		assert worm_move.getYpos() == (oldYpos + 2*Math.sin(Math.PI/4));
 	}
+	
+	//turn
+	@Test
+	public void test_turn_validCase1() {
+		worm_turn.turn(Math.PI);
+		assert worm_turn.getDirection() == Math.PI;
+	}
+	@Test
+	public void test_turn_validCase2() {
+		worm_turn.turn(3*Math.PI);
+		assert worm_turn.getDirection() == 3*Math.PI;
+	}
+	@Test
+	public void test_turn_validCase3() {
+		worm_turn.turn(-Math.PI);
+		assert worm_turn.getDirection() == -Math.PI;
+	}
+	@Test(expected = ModelException.class)
+	public void test_turn_failsNotEnoughActionPoints() {
+		worm_turn.turn(150*Math.PI);
+	}
+	
 	//jump
 	@Test(expected = ModelException.class)
 	public void test_jump_fail() {
