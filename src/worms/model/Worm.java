@@ -292,9 +292,9 @@ public class Worm {
 	 * 			|new.getActionPoint() >= 0
 	 */
 	public void setActionPoints(int actionPoints){
-		if (actionPoints > this.getMaxActionPoints())
+		if (actionPoints >= (this.getMaxActionPoints()))
 			this.actionPoints = this.getMaxActionPoints();
-		if (actionPoints <0)
+		else if (actionPoints <0)
 			this.actionPoints = 0;
 		else 
 			this.actionPoints = actionPoints;

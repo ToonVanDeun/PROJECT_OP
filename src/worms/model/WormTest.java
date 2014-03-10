@@ -26,8 +26,9 @@ public class WormTest {
 	private static Worm worm_name;
 	private static Worm worm_actionpoints;
 	private static Worm worm_move;
-	private static Worm worm_jump;
 	private static Worm worm_turn;
+	private static Worm worm_jump;
+	
 	
 	
 	@Before
@@ -134,14 +135,12 @@ public class WormTest {
 	}
 	@Test
 	public void test_setActionPoints_validCaseTotal2() {
-		System.out.println(worm_actionpoints.getActionPoints());
-		System.out.println(worm_actionpoints.getMaxActionPoints());
-		int newActionPoints = worm_actionpoints.getMaxActionPoints()+500;
-		System.out.println(newActionPoints);
+		int maxAPs = worm_actionpoints.getMaxActionPoints(); 
+		int newActionPoints = (4448+500);
 		worm_actionpoints.setActionPoints(newActionPoints);
-		System.out.println(worm_actionpoints.getActionPoints());
-		System.out.println(worm_actionpoints.getMaxActionPoints());
-		assert worm_actionpoints.getActionPoints() == (worm_actionpoints.getMaxActionPoints());
+		System.out.println("AP " + worm_actionpoints.getActionPoints());
+		System.out.println("maxAP " + worm_actionpoints.getMaxActionPoints());
+		assert worm_actionpoints.getActionPoints() == maxAPs;
 	}
 	
 	//move
@@ -182,5 +181,17 @@ public class WormTest {
 	@Test(expected = ModelException.class)
 	public void test_jump_fail() {
 		worm_jump.jump();
+	}
+	@Test
+	public void test_jump_valid() {
+		System.out.println("xpos" + worm_jump.getXpos());
+		System.out.println("AP" + worm_jump.getActionPoints());
+		System.out.println("mass:" + worm_jump.getMass());
+		double oldXpos = worm_jump.getXpos();
+		worm_jump.turn((3.0/4.0)*Math.PI);
+		worm_jump.jump();
+		System.out.println("xpos" + worm_jump.getXpos());
+		System.out.println("AP" + worm_jump.getActionPoints());
+		assert Math.abs(worm_jump.getXpos() - (oldXpos + 5.59)) <0.1 ;
 	}
 }
