@@ -349,6 +349,8 @@ public class Worm {
 	public boolean isValidStep(int steps){
 		return this.getActionPoints() >= this.computeCostStep(steps);
 	}
+	
+	//turn (nominaal)
 	/**
 	 * Returns the cost in actionpoints for a turn of a given angle
 	 * .
@@ -362,6 +364,7 @@ public class Worm {
 	private int computeCostTurn(double angle){
 		return (int) Math.abs(Math.round(((60*angle)/(2*Math.PI))));
 	}
+	
 	/**
 	 * Checks whether turning over a given angle is valid.
 	 * This means that there must be enough actionpoints to complete the turn.
@@ -377,7 +380,7 @@ public class Worm {
 		return this.getActionPoints() >= this.computeCostTurn(angle);
 	}
 	
-	//turn (nominaal)
+	
 	/**
 	 * Makes the worms turn over a given angle.
 	 * @param angle
