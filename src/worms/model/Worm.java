@@ -7,12 +7,6 @@ import java.util.regex.Pattern;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- *  Positie, radius en mass moeten defensief, de direction nominaal.
- *  De actionpoints op total manner
- * 	De naam ook defensief.
- */
-
-/**
  * A class of worms involving x-position, y-position a radius and a direction.
  * 
  * @invar	The radius must be a valid radius for the worm.
