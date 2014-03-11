@@ -19,25 +19,21 @@ public class WormTest {
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 	}
-
 	private static Worm worm_position;
+	private static Worm worm_direction;
 	private static Worm worm_radius;
-	private static Worm worm_mass;
 	private static Worm worm_name;
-	private static Worm worm_actionpoints;
 	private static Worm worm_move;
 	private static Worm worm_turn;
 	private static Worm worm_jump;
 	
 	
-	
 	@Before
 	public void setUp() throws Exception {
 		worm_position = new Worm(0, 0, 0, 5, "Position");
+		worm_direction = new Worm(0, 0, 0, 5, "Direction");
 		worm_radius = new Worm(0, 0, 0, 5, "Radius");
-		worm_mass = new Worm(0, 0, 0, 1, "Mass");
 		worm_name = new Worm(0, 0, 0, 1, "Name");
-		worm_actionpoints = new Worm(0, 0, 0, 1, "ActionPoints");
 		worm_move = new Worm(0, 0, (Math.PI)/4, 1, "Move");
 		worm_turn = new Worm(0, 0, 0, 1, "Turn");
 		worm_jump = new Worm(0, 0, 3 * Math.PI / 2, 1, "Jump");
@@ -45,22 +41,27 @@ public class WormTest {
 
 	@After
 	public void tearDown() throws Exception {
-	}
-
+	}	
+	
 	//position
 	@Test
-	public void test_setXpos_validXpos() {
-		worm_position.setXpos(7);
-		assert worm_position.getXpos() ==  7;	
+	public void test_isValidPos_valid() {
+		assert worm_position.isValidPos(2.9)==true;
 	}
-	
 	@Test
-	public void test_setYpos_validYpos() {
-		worm_position.setYpos(-5);
-		assert worm_position.getYpos() ==  -5;	
+	public void test_isValidPos_fails() {
+		assert worm_position.isValidPos(Double.NaN)==false;
 	}
 	
 	//direction
+	@Test
+	public void test_isValidDirection_valid() {
+		assert worm_direction.isValidDirection(2.9)==true;
+	}
+	@Test
+	public void test_isValidDirection_fails() {
+		assert worm_direction.isValidDirection(Double.NaN)==false;
+	}
 	
 	//radius
 	@Test
@@ -72,16 +73,17 @@ public class WormTest {
 	public void test_setRadius_fails() {
 		worm_radius.setRadius(0.1);	
 	}
-	
-	//mass (mss niet echt nodig, vooral de ...fails niet)
 	@Test
-	public void test_setMass_valid() {
-		worm_mass.setMass(worm_mass.getRadius());
-		assert worm_mass.getMass() == 1062*((4.0/3.0)*Math.PI);
+	public void test_isValidRadius_valid() {
+		assert worm_radius.isValidRadius(2.9)==true;
 	}
-	@Test(expected = ModelException.class)
-	public void test_setMass_fails() {
-		worm_mass.setMass(0.1);
+	@Test
+	public void test_isValidRadius_failsCase1() {
+		assert worm_radius.isValidRadius(Double.NaN)==false;
+	}
+	@Test
+	public void test_isValidRadius_failsCase2() {
+		assert worm_radius.isValidRadius(0.1)==false;
 	}
 	
 	//name
@@ -117,35 +119,9 @@ public class WormTest {
 		worm_name.setName("Azerty///");
 	}
 	
-	//actionpoints
-	@Test
-	public void test_setMaxActionPoints_valid() {
-		worm_actionpoints.setMaxActionPoints();
-		assert worm_actionpoints.getMaxActionPoints() == Math.round(worm_actionpoints.getMass());
-	}
-	@Test
-	public void test_setActionPoints_validCase() {
-		worm_actionpoints.setActionPoints(500);
-		assert worm_actionpoints.getActionPoints() == 500;
-	}
-	@Test
-	public void test_setActionPoints_validCaseTotal1() {
-		worm_actionpoints.setActionPoints(-10);
-		assert worm_actionpoints.getActionPoints() == 0;
-	}
-	@Test
-	public void test_setActionPoints_validCaseTotal2() {
-		int maxAPs = worm_actionpoints.getMaxActionPoints(); 
-		int newActionPoints = (4448+500);
-		worm_actionpoints.setActionPoints(newActionPoints);
-		System.out.println("AP " + worm_actionpoints.getActionPoints());
-		System.out.println("maxAP " + worm_actionpoints.getMaxActionPoints());
-		assertEquals( worm_actionpoints.getActionPoints(), maxAPs);
-	}
-	
 	//move
 	@Test
-	public void test_move_valid() {
+	public void test_move_validCase1() {
 		int initialActionPoints = worm_move.getActionPoints();
 		double oldXpos = worm_move.getXpos();
 		double oldYpos = worm_move.getYpos();
@@ -155,8 +131,37 @@ public class WormTest {
 		assert worm_move.getXpos() == (oldXpos + 2*Math.cos(Math.PI/4));
 		assert worm_move.getYpos() == (oldYpos + 2*Math.sin(Math.PI/4));
 	}
-	
+	@Test
+	public void test_move_validCaseZeroStep() {
+		int initialActionPoints = worm_move.getActionPoints();
+		double oldXpos = worm_move.getXpos();
+		double oldYpos = worm_move.getYpos();
+		worm_move.move(0);
+		assert worm_move.getActionPoints() == (initialActionPoints);
+		assert worm_move.getXpos() == (oldXpos );
+		assert worm_move.getYpos() == (oldYpos );
+	}
+	@Test(expected = ModelException.class)
+	public void test_move_fails() {
+		worm_move.move(1500);
+	}
+	@Test
+	public void test_isValidStep_valid() {
+		assert worm_move.isValidStep(5)==true;
+	}
+	@Test
+	public void test_isValidStep_fails() {
+		assert worm_move.isValidStep(1500)==false;
+	}
 	//turn
+	@Test
+	public void test_isValidTurn_valid() {
+		assert worm_turn.isValidTurn(5)==true;
+	}
+	@Test
+	public void test_isValidTurn_fails() {
+		assert worm_turn.isValidTurn(1500)==false;
+	}
 	@Test
 	public void test_turn_validCase1() {
 		worm_turn.turn(Math.PI);
@@ -179,19 +184,27 @@ public class WormTest {
 	
 	//jump
 	@Test(expected = ModelException.class)
-	public void test_jump_fail() {
+	public void test_jump_failDirection() {
 		worm_jump.jump();
 	}
 	@Test
 	public void test_jump_valid() {
-		System.out.println("xpos" + worm_jump.getXpos());
-		System.out.println("AP" + worm_jump.getActionPoints());
-		System.out.println("mass:" + worm_jump.getMass());
 		double oldXpos = worm_jump.getXpos();
 		worm_jump.turn((3.0/4.0)*Math.PI);
 		worm_jump.jump();
-		System.out.println("xpos" + worm_jump.getXpos());
-		System.out.println("AP" + worm_jump.getActionPoints());
+		assert Math.abs(worm_jump.getXpos() - (oldXpos + 5.59)) <0.1 ;
+	}
+	@Test(expected = ModelException.class)
+	public void test_jump_failsAP() {
+		worm_jump.turn((3.0/4.0)*Math.PI);
+		worm_jump.jump();
+		worm_jump.jump();
+	}
+	
+	public void test_jumpTime_valid() {
+		double oldXpos = worm_jump.getXpos();
+		worm_jump.turn((3.0/4.0)*Math.PI);
+		worm_jump.jump();
 		assert Math.abs(worm_jump.getXpos() - (oldXpos + 5.59)) <0.1 ;
 	}
 }
