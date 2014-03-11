@@ -209,9 +209,6 @@ public class WormTest {
 	public void test_jumpStep_valid() {
 		double calculated_pos[] = {2.488664731,1.262833481};
 		worm_jump.turn((3.0/4.0)*Math.PI);
-		System.out.println(worm_jump.getActionPoints());
-		System.out.println(worm_jump.getMass());
-		System.out.println(worm_jump.jumpStep(0.5)[0]);
 		assert Math.abs((worm_jump.jumpStep(0.5)[0] - calculated_pos[0])) <0.3;
 		assert Math.abs((worm_jump.jumpStep(0.5)[1] - calculated_pos[1])) <0.3;
 	}
