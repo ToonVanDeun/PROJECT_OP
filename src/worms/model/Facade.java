@@ -43,7 +43,7 @@ public class Facade implements IFacade {
 
 	@Override
 	public double[] getJumpStep(Worm worm, double t) {
-		return worm.JumpStep(t);
+		return worm.jumpStep(t);
 	}
 
 	@Override

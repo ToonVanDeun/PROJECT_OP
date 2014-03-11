@@ -453,7 +453,7 @@ public class Worm {
 	 * @param timeAfterLaunch
 	 * 			The time after the jump started
 	 */
-	public double[] JumpStep(double timeAfterLaunch) {
+	public double[] jumpStep(double timeAfterLaunch) {
 		double[] step;
         step = new double[2];
         if (this.canJump())
