@@ -55,7 +55,7 @@ public class Worm {
 	 * 			If xpos isn't a valid x position the exception is thrown.
 	 * 			| ! isValidXpos(xpos)
 	 */
-	public void setXpos(double xpos) throws ModelException{
+	private void setXpos(double xpos) throws ModelException{
 		if (! isValidPos(xpos))
 			throw new ModelException("not a valid position");
 		this.xpos = xpos;
@@ -77,7 +77,7 @@ public class Worm {
 	 * 			If ypos isn't a valid y position the exception is thrown.
 	 * 			| ! isValidPos(ypos)
 	 */
-	public void setYpos(double ypos) throws ModelException{
+	private void setYpos(double ypos) throws ModelException{
 		if (! isValidPos(ypos))
 			throw new ModelException("not a valid position");
 		this.ypos = ypos;
@@ -89,7 +89,7 @@ public class Worm {
 	 * 			if not, return false.
 	 */
 	public boolean isValidPos(double pos) {
-		return ! (Double.NaN == pos);
+		return ! (Double.isNaN(pos));
 	}
 	
 	//direction (nominaal)
@@ -111,7 +111,7 @@ public class Worm {
 	 * @post	The new direction of the worm is the given direction.
 	 * 			| new.getDirection() == direction
 	 */
-	public void setDirection(double direction){
+	private void setDirection(double direction){
 		assert (isValidDirection(direction));
 		this.direction=direction;
 	}
@@ -121,9 +121,8 @@ public class Worm {
 	 * @return true if the given direction (direction) is a valid direction
 	 * 			if not, return false.
 	 */
-	public
-	static boolean isValidDirection(double direction){
-		return ! (Double.NaN == direction);
+	public boolean isValidDirection(double direction){
+		return ! (Double.isNaN(direction));
 	}
 	
 	//radius (defensief)
@@ -142,6 +141,8 @@ public class Worm {
 	 * 			| isValidRadius(radius)
 	 * @post 	The new radius of the worm is set to the given radius.
 	 * 			|new.getRadius() == radius
+	 * @post	The mass of the worm changes accordingly
+	 * 			|new.getMass() == density*((4.0/3.0)*Math.PI*Math.pow(radius, 3))
 	 * @throws	ModelException
 	 * 			When the given radius is not a valid radius the exception will be thrown.
 	 * 			| ! isValidRadius(radius)) 
@@ -151,6 +152,7 @@ public class Worm {
 			throw new ModelException("not a valid radius");
 		}
 		this.radius = radius;
+		this.setMass(this.radius);
 	}
 	/**
 	 * Checks whether a given radius is a valid radius.
@@ -174,13 +176,13 @@ public class Worm {
 	 * @param lowerbound
 	 * 			The minimal allowed radius of the worm.
 	 */
-	public void setRadiusLowerBound(double lowerbound) {
+	private void setRadiusLowerBound(double lowerbound) {
 		this.radiusLowerBound = lowerbound;
 	}
 	/**
 	 * Sets the minimal allowd radius to 0.25;
 	 */
-	public void setRadiusLowerBound() {
+	private void setRadiusLowerBound() {
 		this.radiusLowerBound = 0.25;
 	}
 	
@@ -191,14 +193,20 @@ public class Worm {
 	 * @param radius
 	 * @post 	The new mass of the worm is set correctly.
 	 * 			|new.getMass() == density*(4/3)*PI*radius^3
+	 * @post 	A new maximum for actionpoints is set.
+	 * 			| new.getMaxActionPoints() == new.getMass();
+	 * @post	The number of actionpoints change accordingly. (AP can't be higher than MaxAP)
+	 * 			| new.getMaxActionPoints() >= new.getActionPoints()
 	 * @throws	ModelException
 	 * 			When the given radius is not a valid radius the exception will be thrown.
 	 * 			| ! isValidRadius(radius))
 	 */
-	public void setMass(double radius) throws ModelException{
+	private void setMass(double radius) throws ModelException{
 		if (! isValidRadius(radius))
 			throw new ModelException("not a valid radius");
-		this.mass = density*((4.0/3.0)*Math.PI*Math.pow(this.getRadius(), 3));
+		this.mass = density*((4.0/3.0)*Math.PI*Math.pow(radius, 3));
+		this.setMaxActionPoints();
+		this.setActionPoints(this.getActionPoints());
 	}
 	/**
 	 * Returns the mass of the worm.
@@ -227,7 +235,6 @@ public class Worm {
 		if (! isValidName(name))
 			throw new ModelException("that name is not valid");
 		this.name = name;
-		
 	}
 	/**
 	 * Checks whether a given name is a valid name.
@@ -272,7 +279,7 @@ public class Worm {
 	 * @effect	The maximal amount of action points has been set.
 	 */
 	@Basic
-	public void setMaxActionPoints(){
+	private void setMaxActionPoints(){
 		 this.maxActionPoints = (int) Math.round(this.getMass());
 	}
 	/**
@@ -291,7 +298,7 @@ public class Worm {
 	 * @post	The value of a worm's action points must never be less then zero.
 	 * 			|new.getActionPoint() >= 0
 	 */
-	public void setActionPoints(int actionPoints){
+	private void setActionPoints(int actionPoints){
 		if (actionPoints >= (this.getMaxActionPoints()))
 			this.actionPoints = this.getMaxActionPoints();
 		else if (actionPoints <0)
@@ -332,7 +339,7 @@ public class Worm {
 				|+Math.abs((4*Math.sin(this.getDirection()))))))		
 	 */
 	private int computeCostStep(int steps){
-		return ((int) Math.round((steps)*(Math.abs(Math.cos(this.getDirection()))
+		return Math.abs((int) Math.round((steps)*(Math.abs(Math.cos(this.getDirection()))
 				+Math.abs((4.0*Math.sin(this.getDirection()))))));
 	}
 	/**
@@ -379,8 +386,6 @@ public class Worm {
 	public boolean isValidTurn(double angle){
 		return this.getActionPoints() >= this.computeCostTurn(angle);
 	}
-	
-	
 	/**
 	 * Makes the worms turn over a given angle.
 	 * @param angle
