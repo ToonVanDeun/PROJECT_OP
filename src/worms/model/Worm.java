@@ -449,7 +449,7 @@ public class Worm {
 	 * 			| new.getXpos() == old.getXpos() + this.jumpDistance()
 	 * @post 	The worms hasn't jumped when the direction is in the range (PI- 2*PI)
 	 * 			| new.getXpos() == old.getXpos()
-	 * @post	The worm's actionpoints are reduced accordingly.
+	 * @post	The worm's actionpoints are reduced to zero.
 	 * 			|new.getActionPoints() == 0;
 	 * @throws ModelException
 	 * 			When the worm has no action point left to jump the exception is thrown.
@@ -461,11 +461,11 @@ public class Worm {
 		this.setXpos(this.getXpos()+this.jumpDistance());
 		this.setActionPoints(0);
 	}
-	//~actionpoints
+	//~actionpoints~jump
 	/**
 	 * checks whether the worms still has actionpoints and is facing the right direction so he can jump.
 	 */
-	private boolean canJump() {
+	public boolean canJump() {
 		return ((this.getActionPoints() > 0) && !((this.getDirection()>Math.PI) && (this.getDirection()<(2*Math.PI))));
 	}
 	//~jump
@@ -487,26 +487,34 @@ public class Worm {
 	}
 	/**
 	 * Returns the time it takes to worm to jump (to his new position).
+	 * @throws	ModelException
+	 * 			If the worm can't jump the exception is thrown.
+	 * 			| ! canJump()
 	 */
-	public double jumpTime() {
+	public double jumpTime() throws ModelException{
 		double time = 0;
-		if (this.canJump())
-			time = this.jumpDistance()/(this.jumpVelocity()*Math.cos(this.getDirection()));
-			return time;
+		if (!this.canJump())
+			throw new ModelException("can't jump");
+		time = this.jumpDistance()/(this.jumpVelocity()*Math.cos(this.getDirection()));
+		return time;
 	}
 	/**
 	 * Returns the worms position during a jump on a given time (after the jump started).
 	 * @param timeAfterLaunch
 	 * 			The time after the jump started
+	 * @throws	ModelException
+	 * 			If the worm can't jump the exception is thrown.
+	 * 			| ! canJump()
 	 */
 	public double[] jumpStep(double timeAfterLaunch) {
 		double[] step;
         step = new double[2];
-        if (this.canJump())
-	        step[0] = ((this.jumpVelocity()*Math.cos(this.getDirection())*timeAfterLaunch)+this.getXpos());   
-	        step[1] = (this.jumpVelocity()*Math.sin(this.getDirection())*timeAfterLaunch - 
-	        		0.5*G*Math.pow(timeAfterLaunch, 2))+this.getYpos();
-			return step;
+        if (! this.canJump())
+        	throw new ModelException("can't jump");
+        step[0] = ((this.jumpVelocity()*Math.cos(this.getDirection())*timeAfterLaunch)+this.getXpos());   
+        step[1] = (this.jumpVelocity()*Math.sin(this.getDirection())*timeAfterLaunch - 
+        		0.5*G*Math.pow(timeAfterLaunch, 2))+this.getYpos();
+		return step;
 	}
 	
 	// variables
