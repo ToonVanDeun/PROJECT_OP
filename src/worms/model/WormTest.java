@@ -46,21 +46,21 @@ public class WormTest {
 	//position
 	@Test
 	public void test_isValidPos_valid() {
-		assert worm_position.isValidPos(2.9)==true;
+		assertEquals( worm_position.isValidPos(2.9),true);
 	}
 	@Test
 	public void test_isValidPos_fails() {
-		assert worm_position.isValidPos(Double.NaN)==false;
+		assertEquals(worm_position.isValidPos(Double.NaN),false);
 	}
 	
 	//direction
 	@Test
 	public void test_isValidDirection_valid() {
-		assert worm_direction.isValidDirection(2.9)==true;
+		assertEquals(worm_direction.isValidDirection(2.9),true);
 	}
 	@Test
 	public void test_isValidDirection_fails() {
-		assert worm_direction.isValidDirection(Double.NaN)==false;
+		assertEquals(worm_direction.isValidDirection(Double.NaN),false);
 	}
 	
 	//radius
@@ -75,32 +75,32 @@ public class WormTest {
 	}
 	@Test
 	public void test_isValidRadius_valid() {
-		assert worm_radius.isValidRadius(2.9)==true;
+		assertEquals(worm_radius.isValidRadius(2.9),true);
 	}
 	@Test
 	public void test_isValidRadius_failsCase1() {
-		assert worm_radius.isValidRadius(Double.NaN)==false;
+		assertEquals(worm_radius.isValidRadius(Double.NaN),false);
 	}
 	@Test
 	public void test_isValidRadius_failsCase2() {
-		assert worm_radius.isValidRadius(0.1)==false;
+		assertEquals(worm_radius.isValidRadius(0.1),false);
 	}
 	
 	//name
 	@Test
 	public void test_setName_validCase1() {
 		worm_name.setName("Az");
-		assert worm_name.getName() == "Az";
+		assertEquals(worm_name.getName(), "Az");
 	}
 	@Test
 	public void test_setName_validCase2() {
 		worm_name.setName("Ab cd ef g");
-		assert worm_name.getName() == "Ab cd ef g";
+		assertEquals(worm_name.getName(), "Ab cd ef g");
 	}
 	@Test
 	public void test_setName_validCase3() {
 		worm_name.setName("Abcde'gh'hij");
-		assert worm_name.getName() == "Abcde'gh'hij";
+		assertEquals(worm_name.getName(), "Abcde'gh'hij");
 	}
 	@Test(expected = ModelException.class)
 	public void test_setName_failsCase1() {
@@ -126,8 +126,8 @@ public class WormTest {
 		double oldXpos = worm_move.getXpos();
 		double oldYpos = worm_move.getYpos();
 		worm_move.move(2);
-		assert worm_move.getActionPoints() == (initialActionPoints
-				- Math.round(5.0*Math.sqrt(2.0)));
+		assertEquals(worm_move.getActionPoints(), (initialActionPoints
+				- Math.round(5.0*Math.sqrt(2.0))));
 		assert worm_move.getXpos() == (oldXpos + 2*Math.cos(Math.PI/4));
 		assert worm_move.getYpos() == (oldYpos + 2*Math.sin(Math.PI/4));
 	}
@@ -137,7 +137,7 @@ public class WormTest {
 		double oldXpos = worm_move.getXpos();
 		double oldYpos = worm_move.getYpos();
 		worm_move.move(0);
-		assert worm_move.getActionPoints() == (initialActionPoints);
+		assertEquals(worm_move.getActionPoints(), (initialActionPoints));
 		assert worm_move.getXpos() == (oldXpos );
 		assert worm_move.getYpos() == (oldYpos );
 	}
@@ -147,20 +147,20 @@ public class WormTest {
 	}
 	@Test
 	public void test_isValidStep_valid() {
-		assert worm_move.isValidStep(5)==true;
+		assertEquals(worm_move.isValidStep(5),true);
 	}
 	@Test
 	public void test_isValidStep_fails() {
-		assert worm_move.isValidStep(1500)==false;
+		assertEquals(worm_move.isValidStep(1500),false);
 	}
 	//turn
 	@Test
 	public void test_isValidTurn_valid() {
-		assert worm_turn.isValidTurn(5)==true;
+		assertEquals(worm_turn.isValidTurn(5),true);
 	}
 	@Test
 	public void test_isValidTurn_fails() {
-		assert worm_turn.isValidTurn(1500)==false;
+		assertEquals(worm_turn.isValidTurn(1500),false);
 	}
 	@Test
 	public void test_turn_validCase1() {
