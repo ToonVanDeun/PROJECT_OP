@@ -202,7 +202,7 @@ public class Worm {
 	 * Returns the lower bound of the radius (meters)
 	 * 	the lower bound of the radius is the minimal allowed radius of the worm.
 	 */
-	@Basic
+	@Basic @Immutable
 	public double getRadiusLowerBound() {
 		return this.radiusLowerBound;
 	}
@@ -225,6 +225,7 @@ public class Worm {
 	/**
 	 * Returns the mass of the worm.
 	 */
+	@Basic
 	public double getMass(){
 		return this.mass;
 	}
@@ -255,6 +256,7 @@ public class Worm {
 	/**
 	 * Returns the name of the worm.
 	 */
+	@Basic
 	public String getName(){
 		return this.name;
 	}
@@ -318,13 +320,13 @@ public class Worm {
 	 * 			| this.maxActionPoints == (int) Math.round(new.getMass()) == int Math.round(mass)
 	 * @effect	The maximal amount of action points has been set.
 	 */
-	@Basic
 	private void setMaxActionPoints(){
 		 this.maxActionPoints = (int) Math.round(this.getMass());
 	}
 	/**
 	 * Return the current amount of action points for this worm.
 	 */
+	@Basic
 	public int getActionPoints(){
 		return this.actionPoints;
 	}
@@ -378,6 +380,7 @@ public class Worm {
 	 * 			|(steps*(int) Math.round((Math.abs(Math.cos(this.getDirection()))
 				|+Math.abs((4*Math.sin(this.getDirection()))))))		
 	 */
+	@Basic
 	private int computeCostStep(int steps){
 		return Math.abs((int) Math.round((steps)*(Math.abs(Math.cos(this.getDirection()))
 				+Math.abs((4.0*Math.sin(this.getDirection()))))));
@@ -408,6 +411,7 @@ public class Worm {
 	 * 			|(int) Math.abs(Math.round(((60*angle)/(2*Math.PI))))
 	 * 
 	 */
+	@Basic
 	private int computeCostTurn(double angle){
 		return (int) Math.abs(Math.round(((60*angle)/(2*Math.PI))));
 	}
@@ -473,6 +477,7 @@ public class Worm {
 	 * Returns the jump velocity of a worm.
 	 * 	this is needed in to calculate the distance over which to worm can jump.
 	 */
+	@Basic
 	private double jumpVelocity() {
 		double force = (5*this.getActionPoints())+(this.getMass()*G);
 		double velocity = ((force/this.getMass())*0.5);
@@ -481,6 +486,7 @@ public class Worm {
 	/**
 	 * Returns the jump distance of a worm.
 	 */
+	@Basic
 	private double jumpDistance() {
 		double distance = (Math.pow(this.jumpVelocity(), 2)*Math.sin(2*this.getDirection()))/G;
 		return distance;	
@@ -491,6 +497,7 @@ public class Worm {
 	 * 			If the worm can't jump the exception is thrown.
 	 * 			| ! canJump()
 	 */
+	@Basic
 	public double jumpTime() throws ModelException{
 		double time = 0;
 		if (!this.canJump())
@@ -506,6 +513,7 @@ public class Worm {
 	 * 			If the worm can't jump the exception is thrown.
 	 * 			| ! canJump()
 	 */
+	@Basic
 	public double[] jumpStep(double timeAfterLaunch) {
 		double[] step;
         step = new double[2];
