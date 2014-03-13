@@ -60,6 +60,7 @@ public class Worm {
 	 * 			Or when no lower bound is given it's set to 0.25 as it is in this case.
 	 * 			|new.getRadiusLowerBound() ==  0.25
 	 */
+	
 	public Worm(double xpos, double ypos, double direction, double radius, String name){
 		this.setXpos(xpos);
 		this.setYpos(ypos);
@@ -74,7 +75,7 @@ public class Worm {
 	/**
 	 * Returns the x-position of the worm.
 	 */
-	@Basic
+	@Basic @Raw
 	public double getXpos(){
 		return this.xpos;
 	}
@@ -88,6 +89,7 @@ public class Worm {
 	 * 			If xpos isn't a valid x-position the exception is thrown.
 	 * 			| ! isValidXpos(xpos)
 	 */
+	@Raw
 	private void setXpos(double xpos) throws ModelException{
 		if (! isValidPos(xpos))
 			throw new ModelException("not a valid position");
@@ -96,7 +98,7 @@ public class Worm {
 	/**
 	 * Returns the y-position of the worm.
 	 */
-	@Basic
+	@Basic @Raw
 	public double getYpos(){
 		return this.ypos;
 	}
@@ -110,6 +112,7 @@ public class Worm {
 	 * 			If ypos isn't a valid y position the exception is thrown.
 	 * 			| ! isValidPos(ypos)
 	 */
+	@Raw
 	private void setYpos(double ypos) throws ModelException{
 		if (! isValidPos(ypos))
 			throw new ModelException("not a valid position");
@@ -122,6 +125,7 @@ public class Worm {
 	 * @return true if the given position (pos) is a valid position
 	 * 			if not, return false.
 	 */
+	@Raw
 	public boolean isValidPos(double pos) {
 		return ! (Double.isNaN(pos));
 	}
@@ -132,7 +136,7 @@ public class Worm {
 	 * 	The direction of the worm is an angle given in radians, 
 	 * 	which indicates where the worm is facing at. (ex. facing up = PI/2, facing right = 0)
 	 */
-	@Basic
+	@Basic @Raw
 	public double getDirection(){
 		return this.direction;
 	}
@@ -145,6 +149,7 @@ public class Worm {
 	 * @post	The new direction of the worm is the given direction.
 	 * 			| new.getDirection() == direction
 	 */
+	@Raw
 	private void setDirection(double direction){
 		assert (isValidDirection(direction));
 		this.direction=direction;
@@ -156,6 +161,7 @@ public class Worm {
 	 * @return true if the given direction (direction) is a valid direction
 	 * 			if not, return false.
 	 */
+	@Raw
 	public boolean isValidDirection(double direction){
 		return ! (Double.isNaN(direction));
 	}
@@ -182,6 +188,7 @@ public class Worm {
 	 * 			When the given radius is not a valid radius the exception will be thrown.
 	 * 			| ! isValidRadius(radius)) 
 	 */
+	
 	public void setRadius(double radius) throws ModelException{
 		if ( ! isValidRadius(radius))
 			throw new ModelException("not a valid radius");
@@ -211,12 +218,14 @@ public class Worm {
 	 * @param lowerbound
 	 * 			The minimal allowed radius of the worm.
 	 */
+	
 	private void setRadiusLowerBound(double lowerbound) {
 		this.radiusLowerBound = lowerbound;
 	}
 	/**
 	 * Sets the minimal allowed radius to 0.25;
 	 */
+	
 	private void setRadiusLowerBound() {
 		this.radiusLowerBound = 0.25;
 	}
@@ -225,7 +234,7 @@ public class Worm {
 	/**
 	 * Returns the mass of the worm.
 	 */
-	@Basic
+	@Basic @Raw
 	public double getMass(){
 		return this.mass;
 	}
@@ -244,6 +253,7 @@ public class Worm {
 	 * 			When the given radius is not a valid radius the exception will be thrown.
 	 * 			| ! isValidRadius(radius))
 	 */
+	
 	private void setMass(double radius) throws ModelException{
 		if (! isValidRadius(radius))
 			throw new ModelException("not a valid radius");
@@ -256,7 +266,7 @@ public class Worm {
 	/**
 	 * Returns the name of the worm.
 	 */
-	@Basic
+	@Basic @Raw
 	public String getName(){
 		return this.name;
 	}
@@ -270,6 +280,7 @@ public class Worm {
 	 * 			When the name is not a valid name the exception is thrown.
 	 * 			| ! isValidName(name)
 	 */
+	@Raw
 	public void setName(String name) throws ModelException{
 		if (! isValidName(name))
 			throw new ModelException("that name is not valid");
@@ -291,6 +302,7 @@ public class Worm {
 	 * 			When the name is not a valid name.
 	 * 			| (! isValidName(name))
 	 */
+	@Raw
 	public static boolean isValidName(String name){
 	    String regex = "^[A-Z]{1}[a-zA-Z \"\']{1,}$";
 	    Pattern pattern = Pattern.compile(regex);
@@ -320,13 +332,14 @@ public class Worm {
 	 * 			| this.maxActionPoints == (int) Math.round(new.getMass()) == int Math.round(mass)
 	 * @effect	The maximal amount of action points has been set.
 	 */
+	
 	private void setMaxActionPoints(){
 		 this.maxActionPoints = (int) Math.round(this.getMass());
 	}
 	/**
 	 * Return the current amount of action points for this worm.
 	 */
-	@Basic
+	@Basic 
 	public int getActionPoints(){
 		return this.actionPoints;
 	}
@@ -380,7 +393,7 @@ public class Worm {
 	 * 			|(steps*(int) Math.round((Math.abs(Math.cos(this.getDirection()))
 				|+Math.abs((4*Math.sin(this.getDirection()))))))		
 	 */
-	@Basic
+	@Basic @Raw
 	private int computeCostStep(int steps){
 		return Math.abs((int) Math.round((steps)*(Math.abs(Math.cos(this.getDirection()))
 				+Math.abs((4.0*Math.sin(this.getDirection()))))));
@@ -396,6 +409,7 @@ public class Worm {
 	 * 			and return False if there aren't enough actionpoints for the wished step.
 	 * 			| this.getActionPoints() >= this.computeCostStep(steps)
 	 */
+	
 	public boolean isValidStep(int steps){
 		return this.getActionPoints() >= this.computeCostStep(steps);
 	}
@@ -411,7 +425,7 @@ public class Worm {
 	 * 			|(int) Math.abs(Math.round(((60*angle)/(2*Math.PI))))
 	 * 
 	 */
-	@Basic
+	@Basic @Raw
 	private int computeCostTurn(double angle){
 		return (int) Math.abs(Math.round(((60*angle)/(2*Math.PI))));
 	}
@@ -477,7 +491,7 @@ public class Worm {
 	 * Returns the jump velocity of a worm.
 	 * 	this is needed in to calculate the distance over which to worm can jump.
 	 */
-	@Basic
+	@Basic 
 	private double jumpVelocity() {
 		double force = (5*this.getActionPoints())+(this.getMass()*G);
 		double velocity = ((force/this.getMass())*0.5);
