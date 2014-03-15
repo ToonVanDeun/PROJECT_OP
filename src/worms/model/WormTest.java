@@ -213,9 +213,30 @@ public class WormTest {
 		assert Math.abs((worm_jump.jumpStep(0.5)[1] - calculated_pos[1])) <0.3;
 	}
 	@Test
-	public void test_canJump_valid() {
+	public void test_canJump_valid1() {
 		worm_jump.turn((3.0/4.0)*Math.PI);
 		assert worm_jump.canJump()==true;
+	}
+	@Test
+	public void test_canJump_valid2() {
+		worm_jump.turn((5.0/2.0)*Math.PI);
+		assert worm_jump.canJump()==true;
+	}
+	@Test
+	public void test_canJump_valid3() {
+		worm_jump.turn((7.0/2.0)*Math.PI);
+		assert worm_jump.canJump()==true;
+	}
+	@Test
+	public void test_canJump_valid4() {
+		worm_jump.turn((1.0/2.0)*Math.PI);
+		assert worm_jump.canJump()==true;
+	}@Test
+	public void test_canJump_invalid1() {
+		System.out.println(worm_jump.getDirection());
+		worm_jump.turn((4.0/2.0)*Math.PI);
+		System.out.println(worm_jump.getDirection());
+		assert worm_jump.canJump()==false;
 	}
 	@Test
 	public void test_canJump_fails() {
