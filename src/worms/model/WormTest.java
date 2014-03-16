@@ -229,6 +229,7 @@ public class WormTest {
 	}
 	@Test
 	public void test_canJump_valid1() {
+		System.out.println(((8/4)*Math.PI)%(2*Math.PI));
 		worm_jump.turn((3.0/4.0)*Math.PI);
 		assert worm_jump.canJump()==true;
 	}

@@ -71,7 +71,7 @@ public class Worm {
 		this.setRadiusLowerBound();
 	}
 	
-	//position (defensief)
+	//position (defensive)
 	/**
 	 * Returns the x-position of the worm.
 	 */
@@ -120,17 +120,18 @@ public class Worm {
 	}
 	/**
 	 * Checks whether the given position is a valid position.
-	 * @param pos
+	 * @param	pos
 	 * 			The positions that needs to be checked.
-	 * @return true if the given position (pos) is a valid position
-	 * 			if not, return false.
+	 * @return 	True if the given position (pos) is a valid position.
+	 * 			If the given position isn't a valid position (not a number (NaN),
+	 * 			the method returns false.
 	 */
 	@Raw
 	public boolean isValidPos(double pos) {
 		return ! (Double.isNaN(pos));
 	}
 	
-	//direction (nominaal)
+	//direction (nominal)
 	/**
 	 * Returns the current direction of the worm.
 	 * 	The direction of the worm is an angle given in radians, 
@@ -156,17 +157,18 @@ public class Worm {
 	}
 	/**
 	 * Checks whether the given direction is a valid direction.
-	 * @param direction
+	 * @param 	direction
 	 * 			The direction that needs to be checked.
-	 * @return true if the given direction (direction) is a valid direction
-	 * 			if not, return false.
+	 * @return 	True if the given direction (direction) is a valid direction.
+	 * 			If the given direction isn't a valid direction (not a number (NaN)),
+	 * 			the method returns false.
 	 */
 	@Raw
 	public boolean isValidDirection(double direction){
 		return ! (Double.isNaN(direction));
 	}
 	
-	//radius (defensief)
+	//radius (defensive)
 	/**
 	 * Returns the current radius (meters) of the worm.
 	 */
@@ -199,7 +201,7 @@ public class Worm {
 	 * Checks whether a given radius is a valid radius.
 	 * @param radius
 	 * 			The radius that's being checked.
-	 * @return	True if and only if the given radius is larger or equal to the minimal allowed radius.
+	 * @return	True if and only if the given radius is larger than or equal to the minimal allowed radius.
 	 * 			| result == (radius >= this.getRadiusLowerBound())
 	 */
 	public boolean isValidRadius(double radius){
@@ -214,7 +216,7 @@ public class Worm {
 		return this.radiusLowerBound;
 	}
 	/**
-	 * Sets the minimal allowed radius to lowerbound;
+	 * Sets the minimal allowed radius to lower bound;
 	 * @param lowerbound
 	 * 			The minimal allowed radius of the worm.
 	 */
@@ -225,12 +227,11 @@ public class Worm {
 	/**
 	 * Sets the minimal allowed radius to 0.25;
 	 */
-	
 	private void setRadiusLowerBound() {
 		this.radiusLowerBound = 0.25;
 	}
 	
-	//mass (defensief)
+	//mass (defensive)
 	/**
 	 * Returns the mass of the worm.
 	 */
@@ -253,7 +254,6 @@ public class Worm {
 	 * 			When the given radius is not a valid radius the exception will be thrown.
 	 * 			| ! isValidRadius(radius))
 	 */
-	
 	private void setMass(double radius) throws ModelException{
 		if (! isValidRadius(radius))
 			throw new ModelException("not a valid radius");
@@ -262,7 +262,7 @@ public class Worm {
 		this.setActionPoints(this.getActionPoints());
 	}
 
-	//name (defensief)
+	//name (defensive)
 	/**
 	 * Returns the name of the worm.
 	 */
@@ -276,7 +276,7 @@ public class Worm {
 	 * 			The new name of the worm.
 	 * @post	The name of the worm is set to the new name.
 	 * 			|new.getName() == name
-	 * @throws ModelException
+	 * @throws 	ModelException
 	 * 			When the name is not a valid name the exception is thrown.
 	 * 			| ! isValidName(name)
 	 */
@@ -290,14 +290,14 @@ public class Worm {
 	 * Checks whether a given name is a valid name.
 	 * @param name
 	 * @pre		First letter of the name must be uppercase.
-	 * 			String regex = "^[A-Z]{1}..."
-	 * 			...
+	 * 			|String regex = "^[A-Z]{1}..."
+	 			|...
 	 * @pre		name must at least exist out of two letters.
-	 * 			String regex = "...{1,}$"
-	 * 			...
+	 * 			|String regex = "...{1,}$"
+	 * 			|...
 	 * @pre		only letters are allowed in the name (also " and ')
-	 * 			String regex = "...[a-zA-Z \"\']..."
-	 * 			...
+	 * 			|String regex = "...[a-zA-Z \"\']..."
+	 * 			|...
 	 * @throws	ModelException
 	 * 			When the name is not a valid name.
 	 * 			| (! isValidName(name))
@@ -310,7 +310,7 @@ public class Worm {
 	    return matcher.find();
 	}
 	
-	//actionpoints (totaal)
+	//actionpoints (total)
 	/**
 	 * Return the maximal amount of action points for this worm.
 	 */
@@ -362,7 +362,7 @@ public class Worm {
 			this.actionPoints = actionPoints;
 	}
 	
-	//move (defensief)
+	//move (defensive)
 	/**
 	 * The method makes the worm move a given number of steps in the direction the worm is currently facing.
 	 * @param steps
@@ -384,7 +384,8 @@ public class Worm {
 		this.setYpos(this.getYpos() + ((steps)*Math.sin(this.getDirection())*this.getRadius()));
 		this.setActionPoints(this.getActionPoints()-this.computeCostStep(steps));
 	}
-	// ~ actionpoints (totaal)
+	
+	// move ~ actionpoints (total)
 	/**
 	 * Returns the cost in actionpoints for a given number of steps in the current direction.
 	 * @param steps
@@ -401,42 +402,33 @@ public class Worm {
 	/**
 	 * Checks whether a given step in the current direction is a valid step.
 	 * This means that there are still enough actionpoints to complete the step.
-	 * 
 	 * @param steps
-	 * 			number of steps in the current direction.
-	 * 		
+	 * 			number of steps in the current direction.	
 	 * @return 	True if there are still enough actionpoints for the wished step.
 	 * 			and return False if there aren't enough actionpoints for the wished step.
 	 * 			| this.getActionPoints() >= this.computeCostStep(steps)
 	 */
-	
 	public boolean isValidStep(int steps){
 		return this.getActionPoints() >= this.computeCostStep(steps);
 	}
 	
-	//turn (nominaal)
+	//turn (nominal)
 	/**
-	 * Returns the cost in actionpoints for a turn of a given angle
-	 * .
+	 * Returns the cost in actionpoints for a turn of a given angle.
 	 * @param angle
-	 * 			the angle over which the worm would like to turn in radians.
-	 * 
+	 * 			the angle over which the worm would like to turn in radians. 
 	 * @return 	the cost in actionpoints for a turn of a given angle rounded up to the nearest integer.
 	 * 			|(int) Math.abs(Math.round(((60*angle)/(2*Math.PI))))
-	 * 
 	 */
 	@Basic @Raw
 	private int computeCostTurn(double angle){
 		return (int) Math.abs(Math.round(((60*angle)/(2*Math.PI))));
 	}
-	
 	/**
 	 * Checks whether turning over a given angle is valid.
-	 * This means that there must be enough actionpoints to complete the turn.
-	 * 
+	 * This means that there must be enough actionpoints to complete the turn. 
 	 * @param angle
 	 * 			the angle over which the worm would like to turn in radians.
-	 * 
 	 * @return 	True if there are still enough actionpoints for the wished turn.
 	 * 			and return False if there aren't enough actionpoints for the wished turn.
 	 * 			| this.getActionPoints() >= this.computeCostTurn(angle) 
@@ -460,7 +452,7 @@ public class Worm {
 		this.setActionPoints(this.getActionPoints()-this.computeCostTurn(angle));
 	}
 	
-	//jump (defensief)
+	//jump (defensive)
 	/**
 	 * Changes the positions of the worm as a result of a jump from the current position.
 	 * @post 	The worms jumped to the correct position when the direction is in the range (0 - PI)
@@ -469,7 +461,7 @@ public class Worm {
 	 * 			| new.getXpos() == old.getXpos()
 	 * @post	The worm's actionpoints are reduced to zero.
 	 * 			|new.getActionPoints() == 0;
-	 * @throws ModelException
+	 * @throws 	ModelException
 	 * 			When the worm has no action point left to jump the exception is thrown.
 	 * 			|! canJump()
 	 */
@@ -479,15 +471,15 @@ public class Worm {
 		this.setXpos(this.getXpos()+this.jumpDistance());
 		this.setActionPoints(0);
 	}
-	//~actionpoints~jump
+	//~jump ~actionpoints (total)
 	/**
-	 * checks whether the worms still has actionpoints and is facing the right direction so he can jump.
+	 * Checks whether the worms still has actionpoints and is facing the right direction so he can jump.
 	 */
 	public boolean canJump() {
 		return ((this.getActionPoints() > 0) && !((this.getDirection()%(2*Math.PI)>Math.PI)
 				&& (this.getDirection()%(2*Math.PI)<(2*Math.PI))));
 	}
-	//~jump
+	//~jump (extra methods used for calculations needed by the method jump.)
 	/**
 	 * Returns the jump velocity of a worm.
 	 * 	this is needed in to calculate the distance over which to worm can jump.
@@ -544,10 +536,6 @@ public class Worm {
 	private double xpos;
 	private double ypos;
 	private double direction;
-	/**
-	 * @pre	The radius of a worm must at all times be at least 0.25 m.
-	 * 		| radius >= 0.25
-	 */
 	private double radius;
 	private double radiusLowerBound;
 	private double mass;
