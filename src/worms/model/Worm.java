@@ -476,8 +476,7 @@ public class Worm {
 	 * Checks whether the worms still has actionpoints and is facing the right direction so he can jump.
 	 */
 	public boolean canJump() {
-		return ((this.getActionPoints() > 0) && !((this.getDirection()%(2*Math.PI)>Math.PI)
-				&& (this.getDirection()%(2*Math.PI)<(2*Math.PI))));
+		return ((this.getActionPoints() > 0) && !((this.getDirection()%(2*Math.PI)>Math.PI)));
 	}
 	//~jump (extra methods used for calculations needed by the method jump.)
 	/**
