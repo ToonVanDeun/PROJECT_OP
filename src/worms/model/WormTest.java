@@ -45,8 +45,16 @@ public class WormTest {
 	
 	//position
 	@Test
-	public void test_isValidPos_valid() {
+	public void test_isValidPos_valid1() {
 		assertEquals( worm_position.isValidPos(2.9),true);
+	}
+	@Test
+	public void test_isValidPos_valid2() {
+		assertEquals( worm_position.isValidPos(Double.POSITIVE_INFINITY),true);
+	}
+	@Test
+	public void test_isValidPos_valid3() {
+		assertEquals( worm_position.isValidPos(Double.NEGATIVE_INFINITY),true);
 	}
 	@Test
 	public void test_isValidPos_fails() {
@@ -74,8 +82,12 @@ public class WormTest {
 		worm_radius.setRadius(0.1);	
 	}
 	@Test
-	public void test_isValidRadius_valid() {
+	public void test_isValidRadius_valid1() {
 		assertEquals(worm_radius.isValidRadius(2.9),true);
+	}
+	@Test
+	public void test_isValidRadius_valid2() {
+		assertEquals(worm_radius.isValidRadius(Double.POSITIVE_INFINITY),true);
 	}
 	@Test
 	public void test_isValidRadius_failsCase1() {
@@ -85,7 +97,10 @@ public class WormTest {
 	public void test_isValidRadius_failsCase2() {
 		assertEquals(worm_radius.isValidRadius(0.1),false);
 	}
-	
+	@Test
+	public void test_isValidRadius_failsCase3() {
+		assertEquals(worm_radius.isValidRadius(Double.NEGATIVE_INFINITY),false);
+	}
 	//name
 	@Test
 	public void test_setName_validCase1() {
