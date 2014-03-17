@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import worms.model.ModelException;
 
-
 public class WormTest {
 
 	@BeforeClass
@@ -199,11 +198,9 @@ public class WormTest {
 	}
 	
 	//jump
-	@Test(expected = IllegalOperationException.class)
+	@Test(expected = ModelException.class)
 	public void test_jump_failDirection() {
-			worm_jump.jump();
-		
-		
+		worm_jump.jump();
 	}
 	@Test
 	public void test_jump_valid() {
