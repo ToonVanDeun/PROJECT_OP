@@ -25,8 +25,13 @@ public class Facade implements IFacade {
 	 * Makes a given worm move over a given number of steps (in the current direction).
 	 */
 	@Override
-	public void move(Worm worm, int nbSteps) {
-		worm.move(nbSteps);
+	public void move(Worm worm, int nbSteps) throws ModelException{
+		try {
+			worm.move(nbSteps);
+		} catch (IllegalOperationException e) {
+			throw new ModelException("can't move");
+		}
+			
 	}
 
 	/**

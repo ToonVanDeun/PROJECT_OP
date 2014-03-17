@@ -85,14 +85,14 @@ public class Worm {
 	 * 			The (new) x-position of the worm
 	 * @post	the given x-position is the new x-position of the worm.
 	 * 			| new.getXpos() == xpos
-	 * @throws	ModelException
+	 * @throws	IllegalArgumentException
 	 * 			If xpos isn't a valid x-position the exception is thrown.
 	 * 			| ! isValidXpos(xpos)
 	 */
 	@Raw
-	private void setXpos(double xpos) throws ModelException{
+	private void setXpos(double xpos) throws IllegalArgumentException{
 		if (! isValidPos(xpos))
-			throw new ModelException("not a valid position");
+			throw new IllegalArgumentException();
 		this.xpos = xpos;
 	}
 	/**
@@ -108,14 +108,14 @@ public class Worm {
 	 * 			The (new) y-position of the worm
 	 * @post	the given y-position is the new y-position of the worm.
 	 * 			| new.getYpos() == ypos
-	 * @throws	ModelException
+	 * @throws	IllegalArgumentException
 	 * 			If ypos isn't a valid y position the exception is thrown.
 	 * 			| ! isValidPos(ypos)
 	 */
 	@Raw
-	private void setYpos(double ypos) throws ModelException{
+	private void setYpos(double ypos) throws IllegalArgumentException{
 		if (! isValidPos(ypos))
-			throw new ModelException("not a valid position");
+			throw new IllegalArgumentException();
 		this.ypos = ypos;
 	}
 	/**
@@ -186,14 +186,14 @@ public class Worm {
 	 * 			|new.getRadius() == radius
 	 * @post	The mass of the worm changes accordingly
 	 * 			|new.getMass() == density*((4.0/3.0)*Math.PI*Math.pow(radius, 3))
-	 * @throws	ModelException
+	 * @throws	IllegalArgumentException
 	 * 			When the given radius is not a valid radius the exception will be thrown.
 	 * 			| ! isValidRadius(radius)) 
 	 */
 	
-	public void setRadius(double radius) throws ModelException{
+	public void setRadius(double radius) throws IllegalArgumentException{
 		if ( ! isValidRadius(radius))
-			throw new ModelException("not a valid radius");
+			throw new IllegalArgumentException();
 		this.radius = radius;
 		this.setMass(this.radius);
 	}
@@ -250,13 +250,13 @@ public class Worm {
 	 * 			| new.getMaxActionPoints() == new.getMass();
 	 * @post	The number of actionpoints change accordingly. (AP can't be higher than MaxAP)
 	 * 			| new.getMaxActionPoints() >= new.getActionPoints()
-	 * @throws	ModelException
+	 * @throws	IllegalArgumentException
 	 * 			When the given radius is not a valid radius the exception will be thrown.
 	 * 			| ! isValidRadius(radius))
 	 */
-	private void setMass(double radius) throws ModelException{
+	private void setMass(double radius) throws IllegalArgumentException{
 		if (! isValidRadius(radius))
-			throw new ModelException("not a valid radius");
+			throw new IllegalArgumentException();
 		this.mass = density*((4.0/3.0)*Math.PI*Math.pow(radius, 3));
 		this.setMaxActionPoints();
 		this.setActionPoints(this.getActionPoints());
@@ -276,14 +276,14 @@ public class Worm {
 	 * 			The new name of the worm.
 	 * @post	The name of the worm is set to the new name.
 	 * 			|new.getName() == name
-	 * @throws 	ModelException
+	 * @throws 	IllegalArgumentException
 	 * 			When the name is not a valid name the exception is thrown.
 	 * 			| ! isValidName(name)
 	 */
 	@Raw
-	public void setName(String name) throws ModelException{
+	public void setName(String name) throws IllegalArgumentException{
 		if (! isValidName(name))
-			throw new ModelException("that name is not valid");
+			throw new IllegalArgumentException();
 		this.name = name;
 	}
 	/**
@@ -298,9 +298,6 @@ public class Worm {
 	 * @pre		only letters are allowed in the name (also " and ')
 	 * 			|String regex = "...[a-zA-Z \"\']..."
 	 * 			|...
-	 * @throws	ModelException
-	 * 			When the name is not a valid name.
-	 * 			| (! isValidName(name))
 	 */
 	@Raw
 	public static boolean isValidName(String name){
@@ -372,14 +369,14 @@ public class Worm {
 	 * 			|new.getYpos() == old.getYpos() + steps*sin(direction)*radius
 	 * @post	The worms actionpoints are correctly reduced.
 	 * 			|new.getActionPoints == old.getActionPoints() - old.computeCostStep(steps)
-	 * @throws	ModelException
+	 * @throws	IllegalArgumentException
 	 * 			If the worm can't move the amount of steps because he has insufficient actionpoint
 	 * 			the exception is thrown.
 	 * 			| ! isValidStep(steps)
 	 */
-	public void move(int steps) throws ModelException {
+	public void move(int steps) throws IllegalOperationException {
 		if ( ! isValidStep(steps))
-			throw new ModelException("not allowed to move");
+			throw new IllegalOperationException();
 		this.setXpos(this.getXpos() + ((steps)*Math.cos(this.getDirection())*this.getRadius()));
 		this.setYpos(this.getYpos() + ((steps)*Math.sin(this.getDirection())*this.getRadius()));
 		this.setActionPoints(this.getActionPoints()-this.computeCostStep(steps));
@@ -461,13 +458,13 @@ public class Worm {
 	 * 			| new.getXpos() == old.getXpos()
 	 * @post	The worm's actionpoints are reduced to zero.
 	 * 			|new.getActionPoints() == 0;
-	 * @throws 	ModelException
+	 * @throws 	IllegalOperationException
 	 * 			When the worm has no action point left to jump the exception is thrown.
 	 * 			|! canJump()
 	 */
-	public void jump() throws ModelException {
+	public void jump() throws IllegalOperationException {
 		if (! canJump())
-			throw new ModelException("can't jump");
+			throw new IllegalOperationException();
 		this.setXpos(this.getXpos()+this.jumpDistance());
 		this.setActionPoints(0);
 	}
@@ -504,15 +501,15 @@ public class Worm {
 	}
 	/**
 	 * Returns the time it takes to worm to jump (to his new position).
-	 * @throws	ModelException
+	 * @throws	IllegalOperationException
 	 * 			If the worm can't jump the exception is thrown.
 	 * 			| ! canJump()
 	 */
 	@Basic
-	public double jumpTime() throws ModelException{
+	public double jumpTime() throws IllegalOperationException{
 		double time = 0;
 		if (!this.canJump())
-			throw new ModelException("can't jump");
+			throw new IllegalOperationException();
 		time = this.jumpDistance()/(this.jumpVelocity()*Math.cos(this.getDirection()));
 		return time;
 	}
@@ -520,16 +517,16 @@ public class Worm {
 	 * Returns the worms position during a jump on a given time (after the jump started).
 	 * @param timeAfterLaunch
 	 * 			The time after the jump started
-	 * @throws	ModelException
+	 * @throws	IllegalOperationException
 	 * 			If the worm can't jump the exception is thrown.
 	 * 			| ! canJump()
 	 */
 	@Basic
-	public double[] jumpStep(double timeAfterLaunch) {
+	public double[] jumpStep(double timeAfterLaunch) throws IllegalOperationException {
 		double[] step;
         step = new double[2];
         if (! this.canJump())
-        	throw new ModelException("can't jump");
+        	throw new IllegalOperationException();
         step[0] = ((this.jumpVelocity()*Math.cos(this.getDirection())*timeAfterLaunch)+this.getXpos());   
         step[1] = (this.jumpVelocity()*Math.sin(this.getDirection())*timeAfterLaunch - 
         		0.5*G*Math.pow(timeAfterLaunch, 2))+this.getYpos();
