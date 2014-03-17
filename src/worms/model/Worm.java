@@ -4,6 +4,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+
+
+
+
+
+
+
+
+
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -90,9 +99,9 @@ public class Worm {
 	 * 			| ! isValidXpos(xpos)
 	 */
 	@Raw
-	private void setXpos(double xpos) throws ModelException{
+	private void setXpos(double xpos) throws IllegalArgumentException{
 		if (! isValidPos(xpos))
-			throw new ModelException("not a valid position");
+			throw new IllegalArgumentException("not a valid position");
 		this.xpos = xpos;
 	}
 	/**
@@ -113,9 +122,9 @@ public class Worm {
 	 * 			| ! isValidPos(ypos)
 	 */
 	@Raw
-	private void setYpos(double ypos) throws ModelException{
+	private void setYpos(double ypos) throws IllegalArgumentException{
 		if (! isValidPos(ypos))
-			throw new ModelException("not a valid position");
+			throw new IllegalArgumentException("not a valid position");
 		this.ypos = ypos;
 	}
 	/**
@@ -191,9 +200,9 @@ public class Worm {
 	 * 			| ! isValidRadius(radius)) 
 	 */
 	
-	public void setRadius(double radius) throws ModelException{
+	public void setRadius(double radius) throws IllegalArgumentException{
 		if ( ! isValidRadius(radius))
-			throw new ModelException("not a valid radius");
+			throw new IllegalArgumentException();
 		this.radius = radius;
 		this.setMass(this.radius);
 	}
@@ -254,9 +263,9 @@ public class Worm {
 	 * 			When the given radius is not a valid radius the exception will be thrown.
 	 * 			| ! isValidRadius(radius))
 	 */
-	private void setMass(double radius) throws ModelException{
+	private void setMass(double radius) throws IllegalArgumentException{
 		if (! isValidRadius(radius))
-			throw new ModelException("not a valid radius");
+			throw new IllegalArgumentException("not a valid radius");
 		this.mass = density*((4.0/3.0)*Math.PI*Math.pow(radius, 3));
 		this.setMaxActionPoints();
 		this.setActionPoints(this.getActionPoints());
@@ -281,9 +290,9 @@ public class Worm {
 	 * 			| ! isValidName(name)
 	 */
 	@Raw
-	public void setName(String name) throws ModelException{
+	public void setName(String name) throws IllegalArgumentException{
 		if (! isValidName(name))
-			throw new ModelException("that name is not valid");
+			throw new IllegalArgumentException();
 		this.name = name;
 	}
 	/**
@@ -377,9 +386,9 @@ public class Worm {
 	 * 			the exception is thrown.
 	 * 			| ! isValidStep(steps)
 	 */
-	public void move(int steps) throws ModelException {
+	public void move(int steps) throws IllegalArgumentException {
 		if ( ! isValidStep(steps))
-			throw new ModelException("not allowed to move");
+			throw new IllegalArgumentException();
 		this.setXpos(this.getXpos() + ((steps)*Math.cos(this.getDirection())*this.getRadius()));
 		this.setYpos(this.getYpos() + ((steps)*Math.sin(this.getDirection())*this.getRadius()));
 		this.setActionPoints(this.getActionPoints()-this.computeCostStep(steps));
@@ -465,9 +474,9 @@ public class Worm {
 	 * 			When the worm has no action point left to jump the exception is thrown.
 	 * 			|! canJump()
 	 */
-	public void jump() throws ModelException {
+	public void jump() throws IllegalStateException {
 		if (! canJump())
-			throw new ModelException("can't jump");
+			throw new IllegalStateException();
 		this.setXpos(this.getXpos()+this.jumpDistance());
 		this.setActionPoints(0);
 	}
@@ -508,10 +517,10 @@ public class Worm {
 	 * 			| ! canJump()
 	 */
 	@Basic
-	public double jumpTime() throws ModelException{
+	public double jumpTime() throws IllegalStateException{
 		double time = 0;
 		if (!this.canJump())
-			throw new ModelException("can't jump");
+			throw new IllegalStateException();
 		time = this.jumpDistance()/(this.jumpVelocity()*Math.cos(this.getDirection()));
 		return time;
 	}
@@ -524,11 +533,11 @@ public class Worm {
 	 * 			| ! canJump()
 	 */
 	@Basic
-	public double[] jumpStep(double timeAfterLaunch) {
+	public double[] jumpStep(double timeAfterLaunch) throws IllegalStateException {
 		double[] step;
         step = new double[2];
         if (! this.canJump())
-        	throw new ModelException("can't jump");
+        	throw new IllegalStateException();
         step[0] = ((this.jumpVelocity()*Math.cos(this.getDirection())*timeAfterLaunch)+this.getXpos());   
         step[1] = (this.jumpVelocity()*Math.sin(this.getDirection())*timeAfterLaunch - 
         		0.5*G*Math.pow(timeAfterLaunch, 2))+this.getYpos();

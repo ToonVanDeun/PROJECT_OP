@@ -26,7 +26,12 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public void move(Worm worm, int nbSteps) {
-		worm.move(nbSteps);
+		try{
+			worm.move(nbSteps);
+		} catch (IllegalArgumentException e) {
+			throw new ModelException("not allowed to move");
+		}
+		
 	}
 
 	/**
@@ -50,7 +55,12 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public void jump(Worm worm) {
-		worm.jump();	
+		try {
+			worm.jump();	
+		} catch (IllegalStateException e) {
+			throw new ModelException("can't jump");
+		}
+		
 	}
 
 	/**
@@ -58,7 +68,11 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public double getJumpTime(Worm worm) {
-		return worm.jumpTime();
+		try {
+			return worm.jumpTime();
+		} catch (IllegalStateException e) {
+			throw new ModelException("can't jump");
+		}
 	}
 
 	/**
@@ -67,7 +81,11 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public double[] getJumpStep(Worm worm, double t) {
-		return worm.jumpStep(t);
+		try {
+			return worm.jumpStep(t);
+		} catch (IllegalStateException e) {
+			throw new ModelException("can't jump");
+		}
 	}
 
 	/**
@@ -107,7 +125,11 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public void setRadius(Worm worm, double newRadius) {
-		worm.setRadius(newRadius);
+		try {
+			worm.setRadius(newRadius);
+		} catch (IllegalArgumentException e) {
+			throw new ModelException("not a valid radius");
+		}
 	}
 
 	/**
@@ -147,7 +169,11 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public void rename(Worm worm, String newName) {
-		worm.setName(newName);
+		try {
+			worm.setName(newName);
+		} catch (IllegalArgumentException e) {
+			throw new ModelException("that name is not valid");
+		}
 	}
 
 	/**

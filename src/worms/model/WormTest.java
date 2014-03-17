@@ -8,8 +8,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import worms.model.ModelException;
-
 public class WormTest {
 
 	@BeforeClass
@@ -77,7 +75,7 @@ public class WormTest {
 		worm_radius.setRadius(5.3);
 		assert worm_radius.getRadius() ==  5.3;	
 	}
-	@Test(expected = ModelException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void test_setRadius_fails() {
 		worm_radius.setRadius(0.1);	
 	}
@@ -117,19 +115,19 @@ public class WormTest {
 		worm_name.setName("Abcde'gh'hij");
 		assertEquals(worm_name.getName(), "Abcde'gh'hij");
 	}
-	@Test(expected = ModelException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void test_setName_failsCase1() {
 		worm_name.setName("A");
 	}
-	@Test(expected = ModelException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void test_setName_failsCase2() {
 		worm_name.setName("azerty");
 	}
-	@Test(expected = ModelException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void test_setName_failsCase3() {
 		worm_name.setName("Azerty5");
 	}
-	@Test(expected = ModelException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void test_setName_failsCase4() {
 		worm_name.setName("Azerty///");
 	}
@@ -156,7 +154,7 @@ public class WormTest {
 		assert worm_move.getXpos() == (oldXpos );
 		assert worm_move.getYpos() == (oldYpos );
 	}
-	@Test(expected = ModelException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void test_move_fails() {
 		worm_move.move(1500);
 	}
@@ -198,7 +196,7 @@ public class WormTest {
 	}
 	
 	//jump
-	@Test(expected = ModelException.class)
+	@Test(expected = IllegalStateException.class)
 	public void test_jump_failDirection() {
 		worm_jump.jump();
 	}
@@ -209,7 +207,7 @@ public class WormTest {
 		worm_jump.jump();
 		assert Math.abs(worm_jump.getXpos() - (oldXpos + 5.59)) <0.1 ;
 	}
-	@Test(expected = ModelException.class)
+	@Test(expected = IllegalStateException.class)
 	public void test_jump_failsAP() {
 		worm_jump.turn((3.0/4.0)*Math.PI);
 		worm_jump.jump();
