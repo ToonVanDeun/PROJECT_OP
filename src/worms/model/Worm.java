@@ -3,20 +3,11 @@ package worms.model;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
-
-
-
-
-
-
-
-
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- * A class of worms involving x-position, y-position a radius and a direction.
+ * A class of worms involving x-position, y-position a radius, a direction a mass , actionpoints and a name.
+ * 
  * 
  * @invar	The radius must be a valid radius for the worm.
  * 		  	| isValidRadius(this.getRadius())
@@ -25,7 +16,10 @@ import be.kuleuven.cs.som.annotate.*;
  * @invar	The actionpoints of a worm must always be equal to or smaller than the maximum actionpoints.
  * 		  	| this.getActionpoints() =< this.getMaxActionPoints()
  * 	
- * @author Toon & Toon
+ * @author 	Toon Stuyck
+ * 			Toon Van Deun
+ * 			Burgerlijk Ingenieur
+ * 			https://github.com/ToonVanDeun/PROJECT_OP
  * @version 1.0
  */
 public class Worm {
@@ -58,7 +52,7 @@ public class Worm {
 	 * @post	The radius is set to the given radius
 	 * 			|new.getRadius() == radius
 	 * @post	The mass of a worm is set accordingly to its radius.
-	 * 			|new.getMass() == density*((4.0/3.0)*Math.PI*Math.pow(radius, 3))
+	 * 			|new.getMass() == DENSITY*((4.0/3.0)*Math.PI*Math.pow(radius, 3))
 	 * @post	The maximum amount of actionpoints is set accordingly to the worm's mass.
 	 * 			|new.getMaxActionPoints() == (int) Math.round(this.getMass())
 	 * @post	The amount of actionpoints are set to the maximum amount of actionpoints.
@@ -69,7 +63,6 @@ public class Worm {
 	 * 			Or when no lower bound is given it's set to 0.25 as it is in this case.
 	 * 			|new.getRadiusLowerBound() ==  0.25
 	 */
-	
 	public Worm(double xpos, double ypos, double direction, double radius, String name){
 		this.setXpos(xpos);
 		this.setYpos(ypos);
@@ -94,14 +87,14 @@ public class Worm {
 	 * 			The (new) x-position of the worm
 	 * @post	the given x-position is the new x-position of the worm.
 	 * 			| new.getXpos() == xpos
-	 * @throws	ModelException
+	 * @throws	IllegalArgumentException
 	 * 			If xpos isn't a valid x-position the exception is thrown.
 	 * 			| ! isValidXpos(xpos)
 	 */
 	@Raw
 	private void setXpos(double xpos) throws IllegalArgumentException{
 		if (! isValidPos(xpos))
-			throw new IllegalArgumentException("not a valid position");
+			throw new IllegalArgumentException();
 		this.xpos = xpos;
 	}
 	/**
@@ -117,14 +110,14 @@ public class Worm {
 	 * 			The (new) y-position of the worm
 	 * @post	the given y-position is the new y-position of the worm.
 	 * 			| new.getYpos() == ypos
-	 * @throws	ModelException
+	 * @throws	IllegalArgumentException
 	 * 			If ypos isn't a valid y position the exception is thrown.
 	 * 			| ! isValidPos(ypos)
 	 */
 	@Raw
 	private void setYpos(double ypos) throws IllegalArgumentException{
 		if (! isValidPos(ypos))
-			throw new IllegalArgumentException("not a valid position");
+			throw new IllegalArgumentException();
 		this.ypos = ypos;
 	}
 	/**
@@ -194,12 +187,11 @@ public class Worm {
 	 * @post 	The new radius of the worm is set to the given radius.
 	 * 			|new.getRadius() == radius
 	 * @post	The mass of the worm changes accordingly
-	 * 			|new.getMass() == density*((4.0/3.0)*Math.PI*Math.pow(radius, 3))
-	 * @throws	ModelException
+	 * 			|new.getMass() == DENSITY*((4.0/3.0)*Math.PI*Math.pow(radius, 3))
+	 * @throws	IllegalArgumentException
 	 * 			When the given radius is not a valid radius the exception will be thrown.
 	 * 			| ! isValidRadius(radius)) 
 	 */
-	
 	public void setRadius(double radius) throws IllegalArgumentException{
 		if ( ! isValidRadius(radius))
 			throw new IllegalArgumentException();
@@ -229,7 +221,6 @@ public class Worm {
 	 * @param lowerbound
 	 * 			The minimal allowed radius of the worm.
 	 */
-	
 	private void setRadiusLowerBound(double lowerbound) {
 		this.radiusLowerBound = lowerbound;
 	}
@@ -250,23 +241,23 @@ public class Worm {
 	}
 	/**
 	 * The method sets the mass of the worm.
-	 * A worms mass is equal to density*(4/3)*PI*radius^3, with density = 1062.
+	 * A worms mass is equal to DENSITY*(4/3)*PI*radius^3, with DENSITY = 1062.
 	 * @param radius
 	 * 			The radius to which the mass must be set accordingly.
 	 * @post 	The new mass of the worm is set correctly.
-	 * 			|new.getMass() == density*(4/3)*PI*radius^3
+	 * 			|new.getMass() == DENSITY*(4/3)*PI*radius^3
 	 * @post 	A new maximum for actionpoints is set.
 	 * 			| new.getMaxActionPoints() == new.getMass();
 	 * @post	The number of actionpoints change accordingly. (AP can't be higher than MaxAP)
 	 * 			| new.getMaxActionPoints() >= new.getActionPoints()
-	 * @throws	ModelException
+	 * @throws	IllegalArgumentException
 	 * 			When the given radius is not a valid radius the exception will be thrown.
 	 * 			| ! isValidRadius(radius))
 	 */
 	private void setMass(double radius) throws IllegalArgumentException{
 		if (! isValidRadius(radius))
-			throw new IllegalArgumentException("not a valid radius");
-		this.mass = density*((4.0/3.0)*Math.PI*Math.pow(radius, 3));
+			throw new IllegalArgumentException();
+		this.mass = DENSITY*((4.0/3.0)*Math.PI*Math.pow(radius, 3));
 		this.setMaxActionPoints();
 		this.setActionPoints(this.getActionPoints());
 	}
@@ -285,7 +276,7 @@ public class Worm {
 	 * 			The new name of the worm.
 	 * @post	The name of the worm is set to the new name.
 	 * 			|new.getName() == name
-	 * @throws 	ModelException
+	 * @throws 	IllegalArgumentException
 	 * 			When the name is not a valid name the exception is thrown.
 	 * 			| ! isValidName(name)
 	 */
@@ -307,9 +298,6 @@ public class Worm {
 	 * @pre		only letters are allowed in the name (also " and ')
 	 * 			|String regex = "...[a-zA-Z \"\']..."
 	 * 			|...
-	 * @throws	ModelException
-	 * 			When the name is not a valid name.
-	 * 			| (! isValidName(name))
 	 */
 	@Raw
 	public static boolean isValidName(String name){
@@ -381,8 +369,8 @@ public class Worm {
 	 * 			|new.getYpos() == old.getYpos() + steps*sin(direction)*radius
 	 * @post	The worms actionpoints are correctly reduced.
 	 * 			|new.getActionPoints == old.getActionPoints() - old.computeCostStep(steps)
-	 * @throws	ModelException
-	 * 			If the worm can't move the amount of steps because he has insufficient actionpoint
+	 * @throws	IllegalArgumentException
+	 * 			If the worm can't move the amount of steps because he has insufficient actionpoints
 	 * 			the exception is thrown.
 	 * 			| ! isValidStep(steps)
 	 */
@@ -470,7 +458,7 @@ public class Worm {
 	 * 			| new.getXpos() == old.getXpos()
 	 * @post	The worm's actionpoints are reduced to zero.
 	 * 			|new.getActionPoints() == 0;
-	 * @throws 	ModelException
+	 * @throws 	IllegalStateException
 	 * 			When the worm has no action point left to jump the exception is thrown.
 	 * 			|! canJump()
 	 */
@@ -512,7 +500,7 @@ public class Worm {
 	}
 	/**
 	 * Returns the time it takes to worm to jump (to his new position).
-	 * @throws	ModelException
+	 * @throws	IllegalStateException
 	 * 			If the worm can't jump the exception is thrown.
 	 * 			| ! canJump()
 	 */
@@ -528,7 +516,7 @@ public class Worm {
 	 * Returns the worms position during a jump on a given time (after the jump started).
 	 * @param timeAfterLaunch
 	 * 			The time after the jump started
-	 * @throws	ModelException
+	 * @throws	IllegalStateException
 	 * 			If the worm can't jump the exception is thrown.
 	 * 			| ! canJump()
 	 */
@@ -555,7 +543,7 @@ public class Worm {
 	private int actionPoints;
 	private String name;
 	//constants
-	private static final int density = 1062;
+	private static final int DENSITY = 1062;
 	private static final double G = 9.80665;
 	
 

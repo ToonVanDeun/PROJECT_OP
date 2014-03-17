@@ -28,10 +28,9 @@ public class Facade implements IFacade {
 	public void move(Worm worm, int nbSteps) {
 		try{
 			worm.move(nbSteps);
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException exc) {
 			throw new ModelException("not allowed to move");
 		}
-		
 	}
 
 	/**
@@ -57,10 +56,9 @@ public class Facade implements IFacade {
 	public void jump(Worm worm) {
 		try {
 			worm.jump();	
-		} catch (IllegalStateException e) {
+		} catch (IllegalStateException exc) {
 			throw new ModelException("can't jump");
 		}
-		
 	}
 
 	/**
@@ -70,7 +68,7 @@ public class Facade implements IFacade {
 	public double getJumpTime(Worm worm) {
 		try {
 			return worm.jumpTime();
-		} catch (IllegalStateException e) {
+		} catch (IllegalStateException exc) {
 			throw new ModelException("can't jump");
 		}
 	}
@@ -83,7 +81,7 @@ public class Facade implements IFacade {
 	public double[] getJumpStep(Worm worm, double t) {
 		try {
 			return worm.jumpStep(t);
-		} catch (IllegalStateException e) {
+		} catch (IllegalStateException exc) {
 			throw new ModelException("can't jump");
 		}
 	}
@@ -127,7 +125,7 @@ public class Facade implements IFacade {
 	public void setRadius(Worm worm, double newRadius) {
 		try {
 			worm.setRadius(newRadius);
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException exc) {
 			throw new ModelException("not a valid radius");
 		}
 	}
@@ -171,7 +169,7 @@ public class Facade implements IFacade {
 	public void rename(Worm worm, String newName) {
 		try {
 			worm.setName(newName);
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException exc) {
 			throw new ModelException("that name is not valid");
 		}
 	}
