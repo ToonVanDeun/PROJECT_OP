@@ -7,7 +7,7 @@ import be.kuleuven.cs.som.annotate.*;
 
 /**
  * A class of worms involving x-position, y-position a radius, a direction a mass , actionpoints and a name.
- * 
+ * Complemented with methodes that interact with the worm and change curtain values.
  * 
  * @invar	The radius must be a valid radius for the worm.
  * 		  	| isValidRadius(this.getRadius())
