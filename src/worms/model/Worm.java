@@ -70,7 +70,6 @@ public class Worm {
 		this.setRadius(radius);
 		this.setName(name);
 		this.setActionPoints(maxActionPoints);
-		this.setRadiusLowerBound();
 	}
 	
 	//position (defensive)
@@ -144,18 +143,26 @@ public class Worm {
 		return this.direction;
 	}
 	/**
-	 * Sets the direction of the worm
+	 * Sets the direction of the worm between 0 and 2*Pi.
 	 * @param direction
 	 * 			The new direction of the worm.
 	 * @pre		The given direction of worm must be a valid direction.
 	 * 			|isValidDirection(direction)
-	 * @post	The new direction of the worm is the given direction.
-	 * 			| new.getDirection() == direction
+	 * @post	The new direction of the worm is the given direction modulo (2*Pi).
+	 * 			And is always greater than zero and smaller than 2*Pi
+	 * 			| if direction%(2*Pi) < 0  
+	 * 			| 	new.getDirection() == direction % (2*Pi) + 2*Pi
+	 * 			| else 
+	 * 			|	new.getDirection() == direction % (2*Pi)
 	 */
 	@Raw
 	private void setDirection(double direction){
 		assert (isValidDirection(direction));
-		this.direction=direction;
+		double newDirection = (direction % (2*Math.PI));
+		if (newDirection < 0) 
+			this.direction = (newDirection+(2*Math.PI));
+		else
+			this.direction = newDirection;
 	}
 	/**
 	 * Checks whether the given direction is a valid direction.
@@ -182,8 +189,6 @@ public class Worm {
 	 * The method sets the radius of the worm to the given radius if it's a valid value.
 	 * @param radius
 	 * 			the new radius of the worm, in meters.
-	 * @pre		The given radius must be a valid value.
-	 * 			| isValidRadius(radius)
 	 * @post 	The new radius of the worm is set to the given radius.
 	 * 			|new.getRadius() == radius
 	 * @post	The mass of the worm changes accordingly
@@ -212,23 +217,18 @@ public class Worm {
 	 * Returns the lower bound of the radius (meters)
 	 * 	the lower bound of the radius is the minimal allowed radius of the worm.
 	 */
-	@Basic @Immutable
+	@Basic 
 	public double getRadiusLowerBound() {
-		return this.radiusLowerBound;
+		return Worm.radiusLowerBound;
 	}
 	/**
 	 * Sets the minimal allowed radius to lower bound;
 	 * @param lowerbound
 	 * 			The minimal allowed radius of the worm.
+	 * 			Originally initialized at 0.25m.
 	 */
-	private void setRadiusLowerBound(double lowerbound) {
-		this.radiusLowerBound = lowerbound;
-	}
-	/**
-	 * Sets the minimal allowed radius to 0.25;
-	 */
-	private void setRadiusLowerBound() {
-		this.radiusLowerBound = 0.25;
+	public static void setRadiusLowerBound(double lowerbound) {
+		Worm.radiusLowerBound = lowerbound;
 	}
 	
 	//mass (defensive)
@@ -289,15 +289,11 @@ public class Worm {
 	/**
 	 * Checks whether a given name is a valid name.
 	 * @param name
-	 * @pre		First letter of the name must be uppercase.
-	 * 			|String regex = "^[A-Z]{1}..."
-	 			|...
-	 * @pre		name must at least exist out of two letters.
-	 * 			|String regex = "...{1,}$"
-	 * 			|...
-	 * @pre		only letters are allowed in the name (also " and ')
-	 * 			|String regex = "...[a-zA-Z \"\']..."
-	 * 			|...
+	 * @post	Returns true if the given name is a valid name
+	 * 			(if it starts with a capital and exists of at least 2 letters and no numbers
+	 * 			also single and double quotes are allowed.)
+	 * 			If the give name is not a valid name the method returns false.
+	 * 			| result == match "[A-Z]{1}[a-zA-Z " ']{1,}"
 	 */
 	@Raw
 	public static boolean isValidName(String name){
@@ -329,9 +325,12 @@ public class Worm {
 	 * 			| this.maxActionPoints == (int) Math.round(new.getMass()) == int Math.round(mass)
 	 * @effect	The maximal amount of action points has been set.
 	 */
-	
 	private void setMaxActionPoints(){
-		 this.maxActionPoints = (int) Math.round(this.getMass());
+		
+		if (this.getMass() < Integer.MAX_VALUE)
+			this.maxActionPoints = (int) Math.round(this.getMass());
+		else 
+			this.maxActionPoints =  Integer.MAX_VALUE;
 	}
 	/**
 	 * Return the current amount of action points for this worm.
@@ -473,11 +472,7 @@ public class Worm {
 	 * Checks whether the worms still has actionpoints and is facing the right direction so he can jump.
 	 */
 	public boolean canJump() {
-		if (this.getDirection() < 0) {
-			this.setDirection(this.getDirection()+(2*Math.PI));
-			this.canJump();
-		}
-		return ((this.getActionPoints() > 0) && !((this.getDirection()%(2*Math.PI)>Math.PI)));
+		return ((this.getActionPoints() > 0) && ((this.getDirection()<=Math.PI)));
 	}
 	//~jump (extra methods used for calculations needed by the method jump.)
 	/**
@@ -509,7 +504,10 @@ public class Worm {
 		double time = 0;
 		if (!this.canJump())
 			throw new IllegalStateException();
-		time = this.jumpDistance()/(this.jumpVelocity()*Math.cos(this.getDirection()));
+		if (this.getDirection() == (Math.PI/2))
+			time = 0;
+		else
+			time = this.jumpDistance()/(this.jumpVelocity()*Math.cos(this.getDirection()));
 		return time;
 	}
 	/**
@@ -537,7 +535,7 @@ public class Worm {
 	private double ypos;
 	private double direction;
 	private double radius;
-	private double radiusLowerBound;
+	private static double radiusLowerBound = 0.25;
 	private double mass;
 	private int maxActionPoints;
 	private int actionPoints;

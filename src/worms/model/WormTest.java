@@ -183,12 +183,12 @@ public class WormTest {
 	@Test
 	public void test_turn_validCase2() {
 		worm_turn.turn(3*Math.PI);
-		assert worm_turn.getDirection() == 3*Math.PI;
+		assert worm_turn.getDirection() == Math.PI;
 	}
 	@Test
 	public void test_turn_validCase3() {
 		worm_turn.turn(-Math.PI);
-		assert worm_turn.getDirection() == -Math.PI;
+		assert worm_turn.getDirection() == Math.PI;
 	}
 	@Test(expected = AssertionError.class)
 	public void test_turn_failsNotEnoughActionPoints() {
